@@ -1,0 +1,24 @@
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
+import { CartDrawer } from "@/components/cart/cart-drawer";
+
+/**
+ * Storefront layout — wraps all customer-facing pages.
+ * Includes sticky header, footer, floating WhatsApp button, and cart drawer.
+ */
+export default function StorefrontLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+      <WhatsAppButton />
+      <CartDrawer />
+    </>
+  );
+}

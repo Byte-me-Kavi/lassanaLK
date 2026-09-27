@@ -1,0 +1,136 @@
+import { Suspense } from "react";
+import { ProductFilters } from "@/components/product/product-filters";
+import { FilterDrawer } from "@/components/product/filter-drawer";
+import { ProductSort } from "@/components/product/product-sort";
+import { ProductCard } from "@/components/product/product-card";
+import { createClient } from "@/lib/supabase/server";
+import type { Product } from "@/lib/types";
+
+export const metadata = {
+  title: "Home | Lassana LK",
+  description: "Browse our beautiful collection of personalized jewelry, name necklaces, and elegant pieces.",
+};
+
+export default async function HomePage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const categoryParam = searchParams.category as string;
+  const sortParam = searchParams.sort as string;
+
+  const supabase = await createClient();
+  let query = supabase
+    .from("products")
+    .select(`
+      id, name, slug, price, compare_price, short_description, stock_quantity, 
+      is_customizable, is_best_seller, is_new, category_id, material, created_at, updated_at, is_active,
+      images:product_images(id, product_id, url, is_primary),
+      category:categories(slug)
+    `)
+    .eq("is_active", true);
+
+  if (categoryParam) {
+    query = query.eq("categories.slug", categoryParam);
+  }
+
+  // Sorting
+  if (sortParam === "price-asc") {
+    query = query.order("price", { ascending: true });
+  } else if (sortParam === "price-desc") {
+    query = query.order("price", { ascending: false });
+  } else if (sortParam === "newest") {
+    query = query.order("created_at", { ascending: false });
+  } else {
+    query = query.order("created_at", { ascending: false }); // Default
+  }
+
+  const { data: rawProducts } = await query;
+
+  let parsedProducts: Product[] = (rawProducts || []).map((p: any) => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    price: p.price,
+    compare_price: p.compare_price,
+    short_description: p.short_description,
+    stock_quantity: p.stock_quantity,
+    is_customizable: p.is_customizable,
+    is_best_seller: p.is_best_seller,
+    is_new: p.is_new,
+    material: p.material,
+    images: (p.images || []).map((img: any) => ({
+      id: img.id,
+      product_id: img.product_id,
+      url: img.url,
+      is_primary: img.is_primary,
+    })),
+    category_id: p.category_id,
+    category: p.category,
+    is_active: p.is_active,
+    created_at: p.created_at,
+    updated_at: p.updated_at,
+  } as Product));
+
+  if (categoryParam) {
+    parsedProducts = parsedProducts.filter(p => p.category?.slug === categoryParam);
+  }
+
+  let products = parsedProducts;
+
+  return (
+    <div className="bg-brand-cream min-h-screen pb-20">
+
+      <div className="container-main pt-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* Desktop Sidebar */}
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-24">
+              <h2 className="font-heading text-xl font-bold text-brand-purple mb-6 pb-2 border-b border-border/40">
+                Categories & Filters
+              </h2>
+              <Suspense fallback={<div>Loading filters...</div>}>
+                <ProductFilters />
+              </Suspense>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1">
+            {/* Toolbar */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/40">
+              <p className="text-sm text-muted-foreground font-medium">
+                Showing {products.length} products
+              </p>
+              
+              <div className="flex items-center gap-3">
+                <Suspense fallback={<div className="w-10" />}>
+                  <FilterDrawer />
+                </Suspense>
+                
+                <Suspense fallback={<div className="w-32" />}>
+                  <ProductSort />
+                </Suspense>
+              </div>
+            </div>
+
+            {/* Product Grid */}
+            {products.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-2xl border border-border/40">
+                <h3 className="font-heading text-2xl font-bold text-brand-purple mb-2">No products found</h3>
+                <p className="text-muted-foreground">Try adjusting your filters to find what you're looking for.</p>
+              </div>
+            )}
+          </main>
+
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,26 +1,253 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* =============================================================
+   Lassana LK — Design System
+   
+   MODULAR COLOR SYSTEM:
+   To change the entire brand, edit ONLY the :root variables below.
+   All components reference these variables through Tailwind classes.
+   
+   Color Distribution:
+   • 60%+ Ivory/White backgrounds
+   • 20-30% Deep Purple accents  
+   • 5-10% Gold highlights
+   ============================================================= */
 
 @theme inline {
+  /* Core Tailwind mappings */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-heading);
+
+  /* shadcn semantic colors */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* ─── Lassana LK Brand Colors ───
+     Use these with Tailwind: bg-brand-purple, text-brand-gold, etc.
+     Change these to rebrand the entire site. */
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-purple-deep: var(--brand-purple-deep);
+  --color-brand-purple-light: var(--brand-purple-light);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-soft: var(--brand-gold-soft);
+  --color-brand-gold-light: var(--brand-gold-light);
+  --color-brand-ivory: var(--brand-ivory);
+  --color-brand-cream: var(--brand-cream);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* ─── Brand Palette ───────────────────────────────────────
+     ★ EDIT THESE to change the entire site's look ★ */
+  --brand-purple: #2F014D;
+  --brand-purple-deep: #3B075F;
+  --brand-purple-light: #5B2D7A;
+  --brand-gold: #C88A25;
+  --brand-gold-soft: #D9A441;
+  --brand-gold-light: #E8C373;
+  --brand-ivory: #FFF9F0;
+  --brand-cream: #F8F1E7;
+
+  /* ─── Semantic Colors (mapped from brand) ──────────────── */
+  --background: #FFF9F0;
+  --foreground: #241C25;
+  --card: #FFFFFF;
+  --card-foreground: #241C25;
+  --popover: #FFFFFF;
+  --popover-foreground: #241C25;
+
+  /* Primary = Deep Purple */
+  --primary: #2F014D;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary = Cream */
+  --secondary: #F8F1E7;
+  --secondary-foreground: #241C25;
+
+  /* Muted = Warm gray */
+  --muted: #F3EDE4;
+  --muted-foreground: #756B72;
+
+  /* Accent = Gold */
+  --accent: #C88A25;
+  --accent-foreground: #FFFFFF;
+
+  /* Destructive */
+  --destructive: #DC2626;
+
+  /* Borders & inputs */
+  --border: #E8E0D6;
+  --input: #E8E0D6;
+  --ring: #2F014D;
+
+  /* Chart colors (purple/gold spectrum) */
+  --chart-1: #2F014D;
+  --chart-2: #3B075F;
+  --chart-3: #C88A25;
+  --chart-4: #D9A441;
+  --chart-5: #756B72;
+
+  /* Radius */
+  --radius: 0.5rem;
+
+  /* Sidebar (admin) */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #241C25;
+  --sidebar-primary: #2F014D;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F8F1E7;
+  --sidebar-accent-foreground: #241C25;
+  --sidebar-border: #E8E0D6;
+  --sidebar-ring: #2F014D;
+
+  /* ─── Custom Font Variables ──────────────────────────────── */
+  --font-heading: var(--font-cormorant), "Georgia", serif;
+}
+
+/* No dark mode — this is a light-theme jewelry site */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+
+  /* ─── Typography Scale ───────────────────────────────────── */
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--brand-purple);
+  }
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
+  }
+  h2 {
+    @apply text-2xl md:text-3xl font-bold tracking-tight;
+  }
+  h3 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+  h4 {
+    @apply text-lg font-semibold;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Custom Utility Classes ─────────────────────────────── */
+@layer utilities {
+  /* Gold text accent */
+  .text-gold {
+    color: var(--brand-gold);
+  }
+  .text-gold-soft {
+    color: var(--brand-gold-soft);
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  .section-padding-sm {
+    @apply py-10 md:py-14 lg:py-16;
+  }
+
+  /* Container */
+  .container-main {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Premium hover effect for cards */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  /* Gold gradient text */
+  .gradient-gold {
+    background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-soft) 50%, var(--brand-gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtle gold underline */
+  .underline-gold {
+    text-decoration: underline;
+    text-decoration-color: var(--brand-gold-soft);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* ─── Scrollbar Styling ──────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brand-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: #C4B8A8;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A89888;
+}
+
+/* ─── Selection Styling ──────────────────────────────────── */
+::selection {
+  background-color: var(--brand-purple);
+  color: white;
 }

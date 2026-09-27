@@ -1,0 +1,12 @@
+# =============================================================
+# Lassana LK — Robots.txt
+# =============================================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /order-confirmed/
+
+Sitemap: https://lassanalk.lk/sitemap.xml

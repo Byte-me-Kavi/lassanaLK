@@ -19,7 +19,7 @@ interface MobileNavProps {
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="left" className="w-75 bg-white p-0">
+      <SheetContent side="left" className="w-[85vw] max-w-sm bg-white p-0">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border/60">
           <Link href="/" onClick={onClose} aria-label="Lassana LK Home">

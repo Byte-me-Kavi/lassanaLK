@@ -11,9 +11,9 @@ export function Footer() {
     <footer className="bg-white border-t border-border/40">
       <div className="container-main section-padding-sm">
         {/* Top Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <Image
                 src="/logo/full logo.png"
@@ -87,7 +87,8 @@ export function Footer() {
           </div>
 
           {/* Shop Links */}
-          <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 lg:col-span-3">
+            <div>
             <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
               Shop
             </h4>
@@ -143,6 +144,7 @@ export function Footer() {
             </ul>
           </div>
         </div>
+      </div>
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-border/60">

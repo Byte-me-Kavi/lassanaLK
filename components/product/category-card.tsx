@@ -16,7 +16,7 @@ export function CategoryCard({ name, slug, imageUrl, description, className }: C
     <Link
       href={`/shop/${slug}`}
       className={cn(
-        "group relative flex h-[280px] w-full flex-col justify-end overflow-hidden rounded-2xl",
+        "group relative flex h-[200px] md:h-[280px] w-full flex-col justify-end overflow-hidden rounded-2xl",
         className
       )}
     >
@@ -33,13 +33,13 @@ export function CategoryCard({ name, slug, imageUrl, description, className }: C
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity group-hover:opacity-90" />
       
       {/* Content */}
-      <div className="relative z-10 p-6 flex flex-col">
-        <h3 className="mb-2 text-2xl font-bold text-white font-heading">{name}</h3>
+      <div className="relative z-10 p-4 md:p-6 flex flex-col">
+        <h3 className="mb-1 md:mb-2 text-lg md:text-2xl font-bold text-white font-heading">{name}</h3>
         {description && (
-          <p className="text-white/80 text-sm mb-4 line-clamp-2">{description}</p>
+          <p className="text-white/80 text-xs md:text-sm mb-2 md:mb-4 hidden sm:-webkit-box sm:line-clamp-2">{description}</p>
         )}
-        <div className="inline-flex items-center text-sm font-medium text-brand-gold-light group-hover:text-white transition-colors">
-          Shop Now <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <div className="inline-flex items-center text-xs md:text-sm font-medium text-brand-gold-light group-hover:text-white transition-colors">
+          Shop Now <ArrowRight className="ml-1 h-3 w-3 md:h-4 md:w-4 transition-transform group-hover:translate-x-1" />
         </div>
       </div>
     </Link>

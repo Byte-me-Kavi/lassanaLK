@@ -22,7 +22,7 @@ export function FilterDrawer() {
           </Button>
         }
       />
-      <SheetContent side="left" className="w-[300px] sm:w-[340px] bg-brand-ivory p-0">
+      <SheetContent side="left" className="w-75 sm:w-85 bg-brand-ivory p-0">
         <SheetHeader className="p-6 border-b border-border/40 text-left">
           <SheetTitle className="font-heading text-2xl text-brand-purple">Filters</SheetTitle>
         </SheetHeader>

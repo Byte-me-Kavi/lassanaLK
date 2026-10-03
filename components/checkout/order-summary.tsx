@@ -24,7 +24,7 @@ export function OrderSummary() {
     <div className="flex flex-col">
       <h3 className="font-heading text-2xl font-bold text-brand-purple mb-6 pb-4 border-b border-brand-purple/10">Order Summary</h3>
       
-      <div className="space-y-4 mb-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="space-y-4 mb-6 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
           <div key={item.cartId} className="flex gap-4">
             <div className="relative h-16 w-16 shrink-0 rounded-lg bg-brand-cream overflow-hidden border border-border/40">

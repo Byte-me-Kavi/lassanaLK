@@ -50,7 +50,7 @@ export function ProductCustomizer({ fields, onChange }: ProductCustomizerProps) 
               placeholder={field.placeholder || ""}
               value={values[field.field_name] || ""}
               onChange={(e) => handleChange(field.field_name, e.target.value)}
-              className="bg-white border-border/40 focus-visible:ring-brand-purple min-h-[80px]"
+              className="bg-white border-border/40 focus-visible:ring-brand-purple min-h-20"
             />
           )}
 

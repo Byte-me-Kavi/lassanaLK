@@ -35,7 +35,7 @@ export function CartDrawer() {
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
       <SheetContent
         side="right"
-        className="w-full sm:w-[420px] bg-white p-0 flex flex-col"
+        className="w-full sm:w-105 bg-white p-0 flex flex-col"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border/60">
@@ -71,7 +71,7 @@ export function CartDrawer() {
                 {items.map((item) => (
                   <div key={item.cartId} className="flex gap-3">
                     {/* Product Image */}
-                    <div className="relative h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                    <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
                       {item.imageUrl ? (
                         <Image
                           src={item.imageUrl}

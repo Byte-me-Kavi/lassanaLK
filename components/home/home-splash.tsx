@@ -28,7 +28,7 @@ export function HomeSplash() {
 
   return (
     <div 
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-cream transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+      className={`fixed inset-0 z-100 flex flex-col items-center justify-center bg-brand-cream transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
         animateOut ? "-translate-y-full" : "translate-y-0"
       }`}
     >
@@ -39,6 +39,7 @@ export function HomeSplash() {
           width={320} 
           height={120} 
           className="mb-8 object-contain drop-shadow-md"
+          style={{ width: "auto" }}
           priority
         />
         <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-brand-purple mb-4 tracking-tight drop-shadow-sm">

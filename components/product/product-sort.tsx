@@ -36,7 +36,7 @@ export function ProductSort() {
     <div className="flex items-center gap-3">
       <span className="text-sm text-muted-foreground hidden sm:inline-block">Sort by:</span>
       <Select value={currentSort} onValueChange={handleSortChange}>
-        <SelectTrigger className="w-[180px] bg-white border-border/40 focus:ring-brand-purple">
+        <SelectTrigger className="w-45 bg-white border-border/40 focus:ring-brand-purple">
           <SelectValue placeholder="Sort Options" />
         </SelectTrigger>
         <SelectContent>

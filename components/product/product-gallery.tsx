@@ -18,7 +18,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-white/40 backdrop-blur-md border border-border/40 aspect-[4/3] md:aspect-square max-h-[45vh] md:max-h-none">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-white/40 backdrop-blur-md border border-border/40 aspect-4/3 md:aspect-square max-h-[45vh] md:max-h-none">
         <Image
           src={displayImages[activeIndex].url}
           alt={`${productName} - Image ${activeIndex + 1}`}

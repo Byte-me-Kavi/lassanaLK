@@ -83,36 +83,35 @@
 }
 
 :root {
-  /* ─── Brand Palette ───────────────────────────────────────
-     ★ EDIT THESE to change the entire site's look ★ */
-  --brand-purple: #2F014D;
-  --brand-purple-deep: #3B075F;
-  --brand-purple-light: #5B2D7A;
-  --brand-gold: #C88A25;
-  --brand-gold-soft: #D9A441;
-  --brand-gold-light: #E8C373;
-  --brand-ivory: #FFF9F0;
-  --brand-cream: #F8F1E7;
+  /* ─── Premium Modern Brand Palette ─────────────────────────────────────── */
+  --brand-purple: #30014F; /* Exact logo purple */
+  --brand-purple-deep: #200030;
+  --brand-purple-light: #501070;
+  --brand-gold: #B57F39; /* Exact logo gold */
+  --brand-gold-soft: #D49A4C;
+  --brand-gold-light: #EBB668;
+  --brand-ivory: #FFFFFF;
+  --brand-cream: #EAE0F2; /* Richer, visible soft lilac/purple */
 
   /* ─── Semantic Colors (mapped from brand) ──────────────── */
-  --background: #FFF9F0;
-  --foreground: #241C25;
+  --background: #F8F9FA; /* Slightly cool off-white */
+  --foreground: #111827; /* Strong, highly readable dark gray */
   --card: #FFFFFF;
-  --card-foreground: #241C25;
+  --card-foreground: #111827;
   --popover: #FFFFFF;
-  --popover-foreground: #241C25;
+  --popover-foreground: #111827;
 
-  /* Primary = Deep Purple */
-  --primary: #2F014D;
+  /* Primary = Logo Purple */
+  --primary: #30014F;
   --primary-foreground: #FFFFFF;
 
-  /* Secondary = Cream */
-  --secondary: #F8F1E7;
-  --secondary-foreground: #241C25;
+  /* Secondary = Soft Lilac */
+  --secondary: #EAE0F2;
+  --secondary-foreground: #30014F;
 
-  /* Muted = Warm gray */
-  --muted: #F3EDE4;
-  --muted-foreground: #756B72;
+  /* Muted = Soft Gray */
+  --muted: #F1F3F5;
+  --muted-foreground: #495057;
 
   /* Accent = Gold */
   --accent: #C88A25;
@@ -122,9 +121,9 @@
   --destructive: #DC2626;
 
   /* Borders & inputs */
-  --border: #E8E0D6;
-  --input: #E8E0D6;
-  --ring: #2F014D;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #30014F;
 
   /* Chart colors (purple/gold spectrum) */
   --chart-1: #2F014D;
@@ -138,16 +137,16 @@
 
   /* Sidebar (admin) */
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #241C25;
-  --sidebar-primary: #2F014D;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #30014F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F8F1E7;
-  --sidebar-accent-foreground: #241C25;
-  --sidebar-border: #E8E0D6;
-  --sidebar-ring: #2F014D;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #30014F;
 
   /* ─── Custom Font Variables ──────────────────────────────── */
-  --font-heading: var(--font-cormorant), "Georgia", serif;
+  --font-heading: var(--font-sans);
 }
 
 /* No dark mode — this is a light-theme jewelry site */
@@ -169,7 +168,7 @@
   /* ─── Typography Scale ───────────────────────────────────── */
   h1, h2, h3, h4 {
     font-family: var(--font-heading);
-    color: var(--brand-purple);
+    color: var(--foreground); /* Professional dark text, not colored! */
   }
   h1 {
     @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
@@ -239,11 +238,11 @@
   background: var(--brand-cream);
 }
 ::-webkit-scrollbar-thumb {
-  background: #C4B8A8;
+  background: #D1B8E8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #A89888;
+  background: #B388D6;
 }
 
 /* ─── Selection Styling ──────────────────────────────────── */

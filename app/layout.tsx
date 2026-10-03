@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, Geist_Mono } from "next/font/google";
+import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// Body font — clean, modern, highly readable
-const inter = Inter({
+// Body font — rounded, clean, modern, highly readable
+const outfit = Outfit({
   variable: "--font-sans",
   subsets: ["latin"],
-  display: "swap",
-});
-
-// Heading font — elegant serif for a premium jewelry feel
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -83,7 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${cormorant.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${outfit.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

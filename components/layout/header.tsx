@@ -17,6 +17,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import { useMounted } from "@/hooks/use-hooks";
 import { MobileNav } from "./mobile-nav";
+import { SearchDialog } from "./search-dialog";
 
 /**
  * Sticky header with logo, navigation, search, wishlist, and cart.
@@ -35,9 +36,9 @@ export function Header() {
       <header
         className={cn(
           "sticky top-0 z-50 w-full",
-          "bg-white/95 backdrop-blur-md",
-          "border-b border-border/60",
-          "transition-shadow duration-300"
+          "bg-white/90 backdrop-blur-lg",
+          "border-b border-border/40",
+          "transition-shadow duration-300",
         )}
       >
         <div className="container-main">
@@ -49,11 +50,15 @@ export function Header() {
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 text-brand-purple" />
             </button>
 
             {/* ─── Logo ──── */}
-            <Link href="/" className="flex-shrink-0" aria-label="Lassana LK Home">
+            <Link
+              href="/"
+              className="flex-shrink-0"
+              aria-label="Lassana LK Home"
+            >
               <Image
                 src="/logo/full logo.png"
                 alt="Lassana LK"
@@ -74,9 +79,8 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-3 py-2 text-sm font-medium rounded-lg",
-                    "text-foreground/80 hover:text-foreground",
-                    "hover:bg-muted transition-colors"
+                    "px-3 py-2 text-sm font-semibold rounded-lg",
+                    "text-brand-purple hover:bg-brand-cream transition-colors",
                   )}
                 >
                   {link.label}
@@ -87,13 +91,7 @@ export function Header() {
             {/* ─── Right Actions ──── */}
             <div className="flex items-center gap-1">
               {/* Search */}
-              <button
-                type="button"
-                className="hidden sm:flex items-center justify-center h-10 w-10 rounded-lg hover:bg-muted transition-colors"
-                aria-label="Search products"
-              >
-                <Search className="h-5 w-5 text-foreground/70" />
-              </button>
+              <SearchDialog />
 
               {/* Wishlist */}
               <Link
@@ -101,7 +99,7 @@ export function Header() {
                 className="relative flex items-center justify-center h-10 w-10 rounded-lg hover:bg-muted transition-colors"
                 aria-label={`Wishlist${mounted && wishlistCount > 0 ? ` (${wishlistCount} items)` : ""}`}
               >
-                <Heart className="h-5 w-5 text-foreground/70" />
+                <Heart className="h-5 w-5 text-brand-purple" />
                 {mounted && wishlistCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-purple text-[10px] font-bold text-white px-1">
                     {wishlistCount}
@@ -116,7 +114,7 @@ export function Header() {
                 className="relative flex items-center justify-center h-10 w-10 rounded-lg hover:bg-muted transition-colors"
                 aria-label={`Shopping cart${mounted && cartItemCount > 0 ? ` (${cartItemCount} items)` : ""}`}
               >
-                <ShoppingBag className="h-5 w-5 text-foreground/70" />
+                <ShoppingBag className="h-5 w-5 text-brand-purple" />
                 {mounted && cartItemCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-purple text-[10px] font-bold text-white px-1">
                     {cartItemCount}

@@ -13,16 +13,16 @@ export function OrderSummary() {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-border/40 bg-white p-6">
-        <h3 className="font-heading text-xl font-semibold mb-4">Order Summary</h3>
+      <div className="py-4">
+        <h3 className="font-heading text-2xl font-bold text-brand-purple mb-4">Order Summary</h3>
         <p className="text-muted-foreground text-sm">Your cart is empty.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-border/40 bg-white p-6 sticky top-24">
-      <h3 className="font-heading text-xl font-semibold mb-6">Order Summary</h3>
+    <div className="flex flex-col">
+      <h3 className="font-heading text-2xl font-bold text-brand-purple mb-6 pb-4 border-b border-brand-purple/10">Order Summary</h3>
       
       <div className="space-y-4 mb-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (

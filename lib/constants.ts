@@ -99,7 +99,6 @@ export const SRI_LANKAN_DISTRICTS = [
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/", label: "Shop" },
   { href: "/shop/collections", label: "Collections" },
   { href: "/shop/personalized-jewelry", label: "Customize" },
   { href: "/about", label: "About" },

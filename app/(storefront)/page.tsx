@@ -1,15 +1,18 @@
 import { Suspense } from "react";
+import { HomeSplash } from "@/components/home/home-splash";
 import { ProductFilters } from "@/components/product/product-filters";
 import { FilterDrawer } from "@/components/product/filter-drawer";
 import { ProductSort } from "@/components/product/product-sort";
 import { ProductCard } from "@/components/product/product-card";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import type { Product } from "@/lib/types";
 
 export const metadata = {
   title: "Home | Lassana LK",
   description: "Browse our beautiful collection of personalized jewelry, name necklaces, and elegant pieces.",
 };
+
+export const revalidate = 3600;
 
 export default async function HomePage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -18,7 +21,10 @@ export default async function HomePage(props: {
   const categoryParam = searchParams.category as string;
   const sortParam = searchParams.sort as string;
 
-  const supabase = await createClient();
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
   let query = supabase
     .from("products")
     .select(`
@@ -78,15 +84,16 @@ export default async function HomePage(props: {
   let products = parsedProducts;
 
   return (
-    <div className="bg-brand-cream min-h-screen pb-20">
-
-      <div className="container-main pt-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+    <div className="min-h-screen pb-20">
+      <HomeSplash />
+      
+      <div className="container-main pt-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start relative">
           
           {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24">
-              <h2 className="font-heading text-xl font-bold text-brand-purple mb-6 pb-2 border-b border-border/40">
+          <aside className="hidden lg:block w-64 shrink-0 sticky top-24 self-start z-10">
+            <div className="bg-brand-cream p-6 rounded-2xl border border-brand-purple/10">
+              <h2 className="font-heading text-xl font-bold text-brand-purple mb-6 pb-2 border-b border-brand-purple/10">
                 Categories & Filters
               </h2>
               <Suspense fallback={<div>Loading filters...</div>}>
@@ -116,7 +123,7 @@ export default async function HomePage(props: {
 
             {/* Product Grid */}
             {products.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 animate-in fade-in duration-1000 delay-300 fill-mode-both">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

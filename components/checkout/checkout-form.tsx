@@ -98,8 +98,8 @@ export function CheckoutForm() {
       )}
 
       {/* Customer Information */}
-      <div className="space-y-5 rounded-2xl border border-border/40 bg-white p-6">
-        <h3 className="font-heading text-xl font-semibold border-b border-border/40 pb-4">
+      <div className="space-y-6 pt-2">
+        <h3 className="font-heading text-2xl font-semibold border-b border-border/40 pb-4">
           Contact Details
         </h3>
         
@@ -131,8 +131,8 @@ export function CheckoutForm() {
       </div>
 
       {/* Delivery Information */}
-      <div className="space-y-5 rounded-2xl border border-border/40 bg-white p-6">
-        <h3 className="font-heading text-xl font-semibold border-b border-border/40 pb-4">
+      <div className="space-y-6 pt-6">
+        <h3 className="font-heading text-2xl font-semibold border-b border-border/40 pb-4">
           Delivery Address
         </h3>
         
@@ -178,7 +178,7 @@ export function CheckoutForm() {
       </div>
 
       {/* Additional Notes */}
-      <div className="space-y-2">
+      <div className="space-y-2 pt-6">
         <Label htmlFor="notes">Order Notes (Optional)</Label>
         <Textarea 
           id="notes" 
@@ -189,38 +189,40 @@ export function CheckoutForm() {
       </div>
 
       {/* COD Confirmation */}
-      <div className="rounded-xl border border-brand-purple/20 bg-brand-cream/30 p-5 space-y-4">
+      <div className="rounded-2xl border-2 border-brand-purple/10 bg-white p-6 space-y-4 mt-8 shadow-sm">
         <div className="flex items-start space-x-3">
           <Checkbox 
             id="codConfirmed" 
             checked={codConfirmed} 
             onCheckedChange={(checked) => setValue("codConfirmed", checked === true ? true : undefined as any, { shouldValidate: true })}
-            className="mt-1"
+            className="mt-1 h-5 w-5 rounded-md border-2 border-brand-purple/40 data-[state=checked]:bg-brand-purple data-[state=checked]:border-brand-purple"
           />
-          <div className="space-y-1 leading-none">
+          <div className="space-y-1.5 leading-none">
             <Label 
               htmlFor="codConfirmed" 
-              className="text-base font-semibold text-brand-purple cursor-pointer"
+              className="text-base font-bold text-foreground cursor-pointer"
             >
               Confirm Cash on Delivery Order *
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               By checking this, you agree to pay the total amount in cash to the courier upon delivery of your items.
             </p>
           </div>
         </div>
-        {errors.codConfirmed && <p className="text-xs text-red-500 font-medium pl-7">{errors.codConfirmed.message}</p>}
+        {errors.codConfirmed && <p className="text-xs text-red-500 font-medium pl-8">{errors.codConfirmed.message}</p>}
       </div>
 
-      <Button 
-        type="submit" 
-        size="lg" 
-        disabled={isSubmitting || items.length === 0}
-        className="w-full h-14 text-lg font-bold bg-brand-purple hover:bg-brand-purple-deep transition-all"
-      >
-        {isSubmitting ? "Processing Order..." : "Place COD Order"}
-        {!isSubmitting && <Truck className="ml-2 h-5 w-5" />}
-      </Button>
+      <div className="pt-6 pb-10">
+        <Button 
+          type="submit" 
+          size="lg" 
+          disabled={isSubmitting || items.length === 0}
+          className="w-full h-16 rounded-xl text-lg font-bold bg-brand-purple hover:bg-brand-purple-deep transition-all shadow-md"
+        >
+          {isSubmitting ? "Processing Order..." : "Place COD Order"}
+          {!isSubmitting && <Truck className="ml-2 h-5 w-5" />}
+        </Button>
+      </div>
     </form>
   );
 }

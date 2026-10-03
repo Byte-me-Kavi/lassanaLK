@@ -18,7 +18,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-white border border-border/40 aspect-[4/3] md:aspect-square max-h-[45vh] md:max-h-none">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-white/40 backdrop-blur-md border border-border/40 aspect-[4/3] md:aspect-square max-h-[45vh] md:max-h-none">
         <Image
           src={displayImages[activeIndex].url}
           alt={`${productName} - Image ${activeIndex + 1}`}
@@ -37,7 +37,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               key={image.id}
               onClick={() => setActiveIndex(idx)}
               className={cn(
-                "relative aspect-square overflow-hidden rounded-lg bg-white border-2 transition-all",
+                "relative aspect-square overflow-hidden rounded-lg bg-white/40 backdrop-blur-md border-2 transition-all",
                 activeIndex === idx
                   ? "border-brand-purple shadow-sm opacity-100"
                   : "border-border/40 opacity-70 hover:opacity-100 hover:border-border"

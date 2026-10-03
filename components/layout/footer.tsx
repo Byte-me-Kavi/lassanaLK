@@ -8,7 +8,7 @@ import { FOOTER_LINKS, SOCIAL_LINKS, SITE_CONFIG } from "@/lib/constants";
  */
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-border/60">
+    <footer className="bg-white border-t border-border/40">
       <div className="container-main section-padding-sm">
         {/* Top Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
@@ -23,7 +23,7 @@ export function Footer() {
                 className="h-10 w-auto"
               />
             </Link>
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+            <p className="text-sm text-brand-purple/70 max-w-xs leading-relaxed">
               {SITE_CONFIG.tagline}
             </p>
 
@@ -33,7 +33,7 @@ export function Footer() {
                 href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-brand-purple hover:text-white transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
                 aria-label="Follow us on Instagram"
               >
                 <svg
@@ -56,7 +56,7 @@ export function Footer() {
                 href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-brand-purple hover:text-white transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
                 aria-label="Follow us on Facebook"
               >
                 <svg
@@ -77,7 +77,7 @@ export function Footer() {
                 href={SOCIAL_LINKS.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-brand-purple hover:text-white transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
                 aria-label="Contact us on WhatsApp"
               >
                 <MessageCircle className="h-4 w-4" />
@@ -87,7 +87,7 @@ export function Footer() {
 
           {/* Shop Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
               Shop
             </h4>
             <ul className="space-y-3">
@@ -95,7 +95,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
                   >
                     {link.label}
                   </Link>
@@ -106,7 +106,7 @@ export function Footer() {
 
           {/* Help Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
               Help
             </h4>
             <ul className="space-y-3">
@@ -114,7 +114,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
                   >
                     {link.label}
                   </Link>
@@ -125,7 +125,7 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
               Company
             </h4>
             <ul className="space-y-3">
@@ -133,7 +133,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
                   >
                     {link.label}
                   </Link>
@@ -146,14 +146,14 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-border/60">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-brand-purple/60 font-medium">
               © {new Date().getFullYear()} Lassana LK. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <Link href="/privacy" className="hover:text-foreground transition-colors">
+            <div className="flex items-center gap-4 text-xs text-brand-purple/60 font-medium">
+              <Link href="/privacy" className="hover:text-brand-purple transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">
+              <Link href="/terms" className="hover:text-brand-purple transition-colors">
                 Terms & Conditions
               </Link>
             </div>

@@ -12,6 +12,11 @@ const CATEGORIES = [
   { id: "rings", label: "Rings" },
   { id: "earrings", label: "Earrings" },
   { id: "bracelets", label: "Bracelets" },
+  { id: "sun-glass", label: "Sun glass" },
+  { id: "chain", label: "Chain" },
+  { id: "vehicle-metal-customize", label: "Vehicle metal customize" },
+  { id: "metal-customize", label: "Metal customize" },
+  { id: "2d-metal-sign", label: "2D metal sign" },
 ];
 
 export function ProductFilters({ className }: { className?: string }) {

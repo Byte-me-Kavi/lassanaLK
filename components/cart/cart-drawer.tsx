@@ -154,6 +154,7 @@ export function CartDrawer() {
                 className="w-full h-11 bg-brand-purple hover:bg-brand-purple-deep text-white"
                 onClick={closeCart}
                 render={<Link href="/checkout" />}
+                nativeButton={false}
               >
                 Proceed to Order
               </Button>

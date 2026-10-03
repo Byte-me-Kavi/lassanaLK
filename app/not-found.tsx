@@ -3,10 +3,18 @@
 // =============================================================
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+      <Image
+        src="/logo/full logo.png"
+        alt="Lassana LK"
+        width={200}
+        height={70}
+        className="mb-10 w-auto h-16 md:h-20"
+      />
       <h1 className="text-6xl font-bold text-brand-purple mb-4">404</h1>
       <h2 className="text-2xl font-semibold text-foreground mb-2">
         Page Not Found

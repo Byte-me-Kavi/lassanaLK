@@ -57,9 +57,9 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   };
 
   return (
-    <div className={cn("group flex flex-col rounded-2xl bg-white p-3 shadow-sm border border-border/40 transition-all hover:shadow-md hover:border-border card-hover", className)}>
+    <div className={cn("group flex flex-col rounded-2xl bg-white p-3 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-border/60 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 card-hover", className)}>
       {/* Image Container */}
-      <Link href={`/products/${product.slug}`} className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-4 block">
+      <Link href={`/products/${product.slug}`} className="relative aspect-square overflow-hidden rounded-xl bg-gray-50/50 mb-4 block">
         {/* Badges */}
         <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
           {product.is_new && (
@@ -117,20 +117,20 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         </div>
 
         <Link href={`/products/${product.slug}`} className="block group-hover:text-brand-purple transition-colors">
-          <h3 className="font-semibold text-foreground text-sm md:text-base line-clamp-2 mb-1">
+          <h3 className="font-semibold text-foreground text-base md:text-lg line-clamp-2 mb-1">
             {product.name}
           </h3>
         </Link>
         
         {product.material && (
           <div className="mb-1.5">
-            <span className="inline-block bg-brand-cream border border-brand-purple/20 text-brand-purple text-[10px] font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+            <span className="inline-block bg-brand-cream/30 text-brand-purple text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
               {product.material}
             </span>
           </div>
         )}
         
-        <p className="text-xs text-muted-foreground line-clamp-2 mb-3 flex-1">
+        <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1 font-medium">
           {product.short_description || "\u00A0"}
         </p>
 
@@ -138,7 +138,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
           <PriceDisplay 
             price={product.price} 
             comparePrice={product.compare_price} 
-            size="md" 
+            size="lg" 
           />
           
           {product.is_customizable ? (

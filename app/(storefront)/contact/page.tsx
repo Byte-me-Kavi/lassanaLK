@@ -1,8 +1,4 @@
-import { MapPin, MessageCircle, Mail, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { MessageCircle, Mail, Clock } from "lucide-react";
 import { generalInquiryLink } from "@/lib/whatsapp";
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -13,92 +9,66 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="bg-brand-ivory min-h-screen pb-24 pt-12">
-      <div className="container-main max-w-6xl">
+    <div className="bg-brand-ivory min-h-screen pb-24 pt-16 md:pt-24">
+      <div className="container-main max-w-5xl">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-purple mb-4">
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-purple mb-6">
             Get in Touch
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We're here to help you find the perfect piece or answer any questions you might have about your order.
+            We're here to help you find the perfect personalized piece or answer any questions you might have about your order.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Contact Info Cards */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white p-6 rounded-2xl border border-border/40 flex gap-4 shadow-sm">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]">
-                <MessageCircle className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-foreground mb-1">WhatsApp Support</h3>
-                <p className="text-sm text-muted-foreground mb-3">Fastest way to reach us for order updates and design previews.</p>
-                <a href={generalInquiryLink()} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-[#25D366] hover:underline">
-                  +{SITE_CONFIG.whatsappNumber}
-                </a>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* WhatsApp Support Card */}
+          <div className="bg-white p-8 rounded-3xl border border-border/40 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow group">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#25D366]/10 text-[#25D366] mb-6 group-hover:scale-110 transition-transform duration-300">
+              <MessageCircle className="h-8 w-8" />
             </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-border/40 flex gap-4 shadow-sm">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-cream text-brand-purple">
-                <Mail className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-foreground mb-1">Email Us</h3>
-                <p className="text-sm text-muted-foreground mb-3">For business inquiries and general questions.</p>
-                <a href="mailto:hello@lassanalk.lk" className="text-sm font-semibold text-brand-purple hover:underline">
-                  hello@lassanalk.lk
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-border/40 flex gap-4 shadow-sm">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-cream text-brand-purple">
-                <Clock className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-foreground mb-1">Working Hours</h3>
-                <p className="text-sm text-muted-foreground">Monday - Saturday</p>
-                <p className="text-sm font-semibold text-foreground">9:00 AM - 6:00 PM</p>
-              </div>
-            </div>
+            <h3 className="text-xl font-bold font-heading text-foreground mb-3">WhatsApp Support</h3>
+            <p className="text-sm text-muted-foreground mb-6 flex-1">
+              The fastest way to reach us for order updates, design previews, and quick questions.
+            </p>
+            <a 
+              href={generalInquiryLink()} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center justify-center h-12 px-6 rounded-xl bg-[#25D366] text-white font-bold hover:bg-[#20b858] transition-colors w-full"
+            >
+              Message Us
+            </a>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-3xl p-8 md:p-10 border border-border/40 shadow-sm h-full">
-              <h2 className="text-2xl font-bold font-heading text-brand-purple mb-6">Send us a message</h2>
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Your Name</Label>
-                    <Input id="name" placeholder="John Doe" className="bg-brand-ivory/50 border-border/40" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" type="email" placeholder="john@example.com" className="bg-brand-ivory/50 border-border/40" />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" placeholder="Order Inquiry #LLK-..." className="bg-brand-ivory/50 border-border/40" />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" placeholder="How can we help you?" className="bg-brand-ivory/50 border-border/40 min-h-[150px] resize-none" />
-                </div>
-                
-                <Button type="button" size="lg" className="w-full md:w-auto px-8 bg-brand-purple hover:bg-brand-purple-deep text-white h-12">
-                  Send Message
-                </Button>
-                
-                <p className="text-xs text-muted-foreground mt-4">
-                  * Note: This form is for demonstration. For the fastest response, please use our WhatsApp support.
-                </p>
-              </form>
+          {/* Email Us Card */}
+          <div className="bg-white p-8 rounded-3xl border border-border/40 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow group">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-cream text-brand-purple mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Mail className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-bold font-heading text-foreground mb-3">Email Us</h3>
+            <p className="text-sm text-muted-foreground mb-6 flex-1">
+              Prefer email? Reach out for business inquiries, bulk orders, and detailed questions.
+            </p>
+            <a 
+              href="mailto:hello@lassanalk.lk" 
+              className="inline-flex items-center justify-center h-12 px-6 rounded-xl bg-brand-purple text-white font-bold hover:bg-brand-purple-deep transition-colors w-full"
+            >
+              hello@lassanalk.lk
+            </a>
+          </div>
+
+          {/* Working Hours Card */}
+          <div className="bg-white p-8 rounded-3xl border border-border/40 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow group">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-cream text-brand-purple mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Clock className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-bold font-heading text-foreground mb-3">Working Hours</h3>
+            <p className="text-sm text-muted-foreground mb-6 flex-1">
+              Our digital doors never close. We are available to process orders and answer queries around the clock.
+            </p>
+            <div className="w-full bg-brand-ivory/50 rounded-xl p-3 border border-border/40">
+              <p className="text-sm font-semibold text-brand-purple uppercase tracking-wider mb-1">All Days</p>
+              <p className="text-lg font-bold text-foreground">24 Hours</p>
             </div>
           </div>
         </div>

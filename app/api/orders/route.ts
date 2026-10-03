@@ -1,6 +1,19 @@
 import { NextResponse } from "next/server";
 import { createOrderSchema } from "@/lib/validators/checkout";
 import { createClient } from "@/lib/supabase/server";
+import { createCodClient } from "@/lib/supabase/cod-client";
+
+const ALLOWED_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 
 export async function POST(req: Request) {
   try {
@@ -65,9 +78,18 @@ export async function POST(req: Request) {
     if (orderError) throw orderError;
 
     // 3. Insert Order Items & Deduct Stock
+    const productDescriptions: string[] = [];
     for (const item of validatedData.items) {
       const dbProduct = products?.find((p: any) => p.id === item.productId);
       
+      // Build description for COD system
+      let itemDesc = `${dbProduct?.name || "Unknown"} x${item.quantity}`;
+      if (item.customizations && item.customizations.length > 0) {
+        const customParts = item.customizations.map(c => `${c.fieldLabel}: ${c.value}`);
+        itemDesc += ` (${customParts.join(", ")})`;
+      }
+      productDescriptions.push(itemDesc);
+
       const { data: orderItemData, error: itemError } = await supabase.from("order_items").insert({
         order_id: orderData.id,
         product_id: item.productId,
@@ -98,18 +120,76 @@ export async function POST(req: Request) {
       }).eq("id", item.productId);
     }
 
+    // =========================================================
+    // 5. Create order in COD Order Management System
+    // =========================================================
+    // The COD system auto-assigns waybill numbers via a DB trigger.
+    // We insert the order there and get back the waybill_id.
+    // This is non-blocking — if it fails, the main order still succeeds.
+    // =========================================================
+    let waybillId: number | null = null;
+    try {
+      const codSupabase = createCodClient();
+
+      // Build the full delivery address for the COD system
+      const fullAddress = [
+        validatedData.customer.address,
+        validatedData.customer.city,
+        validatedData.customer.district,
+        validatedData.customer.postalCode,
+      ].filter(Boolean).join(", ");
+
+      // Insert order into COD system — waybill_id is auto-assigned by trigger
+      const { data: codOrder, error: codError } = await codSupabase
+        .from("orders")
+        .insert({
+          order_number: orderNumber,
+          receiver_name: validatedData.customer.customerName,
+          delivery_address: fullAddress,
+          district_name: validatedData.customer.district,
+          city: validatedData.customer.city,
+          receiver_phone: validatedData.customer.customerPhone,
+          cod: total,
+          description: productDescriptions.join(" | "),
+          actual_value: calculatedSubtotal,
+          manager_id: "61bd052f-c02e-455d-87f8-8c0a9545c145" // Specific manager for automated Lassana LK orders
+        })
+        .select("waybill_id")
+        .single();
+
+      if (codError) {
+        console.error("[COD Integration] Failed to create COD order:", codError);
+      } else {
+        waybillId = codOrder?.waybill_id ?? null;
+        console.log(`[COD Integration] Order ${orderNumber} created with waybill: ${waybillId}`);
+
+        // Update the Lassana LK order with the waybill ID for reference
+        if (waybillId) {
+          await supabase
+            .from("orders")
+            .update({ waybill_id: waybillId })
+            .eq("id", orderData.id);
+        }
+      }
+    } catch (codErr) {
+      // Log but don't fail the main order
+      console.error("[COD Integration] Error:", codErr);
+    }
+
     return NextResponse.json({
       success: true,
       orderNumber,
       orderId: orderData.id,
+      waybillId,
       message: "Order placed successfully"
-    });
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Order creation failed:", error);
     return NextResponse.json(
       { error: "Failed to create order. Invalid data." },
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 }
+

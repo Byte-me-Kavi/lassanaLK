@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { Truck, AlertCircle } from "lucide-react";
 import { useCartStore } from "@/stores/cart-store";
 import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/validators/checkout";
 import { SRI_LANKAN_DISTRICTS } from "@/lib/constants";
+import citiesData from "@/lib/cities.json";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,9 @@ export function CheckoutForm() {
   const { items, clearCart } = useCartStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const citySuggestionsRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -47,12 +51,47 @@ export function CheckoutForm() {
   });
 
   const districtValue = watch("district");
+  const cityValue = watch("city");
   const codConfirmed = watch("codConfirmed");
+
+  // Handle click outside to close city suggestions
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (citySuggestionsRef.current && !citySuggestionsRef.current.contains(event.target as Node)) {
+        setShowCitySuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const availableCities = useMemo(() => {
+    if (!districtValue) return [];
+    return (citiesData as Record<string, string[]>)[districtValue] || [];
+  }, [districtValue]);
+
+  const filteredCities = useMemo(() => {
+    if (!cityValue) return availableCities;
+    const lower = cityValue.toLowerCase();
+    return availableCities.filter(c => c.toLowerCase().includes(lower));
+  }, [availableCities, cityValue]);
 
   const onSubmit = async (data: CheckoutFormValues) => {
     if (items.length === 0) {
       setError("Your cart is empty. Please add items before checking out.");
       return;
+    }
+
+    // Validate city against selected district
+    const exactCity = availableCities.find(c => c.toLowerCase() === data.city.toLowerCase());
+    if (!exactCity && availableCities.length > 0) {
+      setError(`Please select a valid city from the suggestions for ${data.district}.`);
+      return;
+    }
+
+    // Use the exact city case from our JSON if it matches (or keep the user's if districts/cities aren't fully mapped)
+    if (exactCity) {
+      data.city = exactCity;
     }
 
     setIsSubmitting(true);
@@ -145,16 +184,13 @@ export function CheckoutForm() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="space-y-2">
-              <Label htmlFor="city">City / Town *</Label>
-              <Input id="city" {...register("city")} className={errors.city ? "border-red-500" : ""} />
-              {errors.city && <p className="text-xs text-red-500">{errors.city.message}</p>}
-            </div>
-            
-            <div className="space-y-2">
               <Label htmlFor="district">District *</Label>
               <Select 
                 value={districtValue} 
-                onValueChange={(val) => setValue("district", val as any, { shouldValidate: true })}
+                onValueChange={(val) => {
+                  setValue("district", val as any, { shouldValidate: true });
+                  setValue("city", "", { shouldValidate: true }); // Reset city when district changes
+                }}
               >
                 <SelectTrigger id="district" className={errors.district ? "border-red-500" : ""}>
                   <SelectValue placeholder="Select District" />
@@ -166,6 +202,43 @@ export function CheckoutForm() {
                 </SelectContent>
               </Select>
               {errors.district && <p className="text-xs text-red-500">{errors.district.message}</p>}
+            </div>
+
+            <div className="space-y-2 relative" ref={citySuggestionsRef}>
+              <Label htmlFor="city">City / Town *</Label>
+              <Input 
+                id="city" 
+                {...register("city")} 
+                autoComplete="off"
+                onFocus={() => {
+                  if (districtValue) setShowCitySuggestions(true);
+                }}
+                onChange={(e) => {
+                  setValue("city", e.target.value, { shouldValidate: true });
+                  setShowCitySuggestions(true);
+                }}
+                className={errors.city ? "border-red-500" : ""} 
+                placeholder={districtValue ? "Type to search..." : "Select District first"}
+                disabled={!districtValue}
+              />
+              {errors.city && <p className="text-xs text-red-500">{errors.city.message}</p>}
+              
+              {showCitySuggestions && filteredCities.length > 0 && (
+                <ul className="absolute z-50 w-full bg-white border border-slate-200 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-xl">
+                  {filteredCities.map(c => (
+                    <li 
+                      key={c} 
+                      className="px-4 py-3 hover:bg-brand-cream cursor-pointer text-sm text-foreground active:bg-brand-cream/80"
+                      onClick={() => {
+                        setValue("city", c, { shouldValidate: true });
+                        setShowCitySuggestions(false);
+                      }}
+                    >
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <div className="space-y-2">

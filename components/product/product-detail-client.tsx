@@ -156,7 +156,9 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
               {product.material && (
                 <div className="flex flex-col">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider mb-0.5">Material</span>
-                  <span className="text-sm font-semibold text-foreground">{product.material}</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    {typeof product.material === 'string' ? product.material : product.material?.name}
+                  </span>
                 </div>
               )}
               {product.color && (

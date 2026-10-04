@@ -43,7 +43,7 @@ const productSchema = z.object({
   category: z.string().min(1, "Category is required"),
   sku: z.string().optional(),
   stock_quantity: z.coerce.number().min(0),
-  material: z.string().optional(),
+  material_id: z.string().optional(),
   is_featured: z.boolean(),
   is_new: z.boolean(),
   is_active: z.boolean(),
@@ -59,17 +59,25 @@ export function ProductForm() {
   const [isUploading, setIsUploading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+  const [materials, setMaterials] = useState<{ id: string; name: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
 
   useEffect(() => {
-    async function loadCategories() {
-      const { data, error } = await supabase.from("categories").select("id, name").eq("is_active", true).order("sort_order");
-      if (data && !error) {
-        setCategories(data);
+    async function loadData() {
+      const [catRes, matRes] = await Promise.all([
+        supabase.from("categories").select("id, name").eq("is_active", true).order("sort_order"),
+        supabase.from("materials").select("id, name").order("name")
+      ]);
+      
+      if (catRes.data && !catRes.error) {
+        setCategories(catRes.data);
+      }
+      if (matRes.data && !matRes.error) {
+        setMaterials(matRes.data);
       }
     }
-    loadCategories();
+    loadData();
   }, [supabase]);
 
   const form = useForm<ProductFormValues>({
@@ -136,7 +144,7 @@ export function ProductForm() {
           category_id: data.category,
           sku: data.sku || null,
           stock_quantity: data.stock_quantity,
-          material: data.material || null,
+          material_id: data.material_id || null,
           is_featured: data.is_featured,
           is_new: data.is_new,
           is_active: data.is_active,
@@ -417,14 +425,14 @@ export function ProductForm() {
 
               <div className="space-y-2">
                 <Label>Material</Label>
-                <Select onValueChange={(val: any) => form.setValue("material", val || "")}>
+                <Select onValueChange={(val: any) => form.setValue("material_id", val || "")}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select material" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="18k Solid Gold">18k Solid Gold</SelectItem>
-                    <SelectItem value="Gold Plated">Gold Plated</SelectItem>
-                    <SelectItem value="Sterling Silver">Sterling Silver</SelectItem>
+                    {materials.map(m => (
+                      <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

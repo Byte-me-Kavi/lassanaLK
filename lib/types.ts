@@ -18,6 +18,14 @@ export interface Category {
   updated_at: string;
 }
 
+export interface Material {
+  id: string;
+  name: string;
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -29,7 +37,7 @@ export interface Product {
   sku: string | null;
   stock_quantity: number;
   category_id: string | null;
-  material: string | null;
+  material_id: string | null;
   color: string | null;
   is_featured: boolean;
   is_new: boolean;
@@ -43,6 +51,7 @@ export interface Product {
   updated_at: string;
   images?: { id: string; url: string; is_primary: boolean; [key: string]: any }[];
   category?: any;
+  material?: any;
 }
 
 /** Product with all its relations loaded */

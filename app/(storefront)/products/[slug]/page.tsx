@@ -14,15 +14,15 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  // Fetch product and its images explicitly selecting columns
   const { data: productData, error: productError } = await supabase
     .from("products")
     .select(`
       id, name, slug, description, short_description, price, compare_price, sku, stock_quantity,
-      category_id, material, color, is_featured, is_new, is_best_seller, is_customizable,
+      category_id, material_id, color, is_featured, is_new, is_best_seller, is_customizable,
       is_active, seo_title, seo_description, tags, created_at, updated_at,
       images:product_images(id, product_id, url, alt_text, sort_order, is_primary, created_at),
-      category:categories(name)
+      category:categories(name),
+      material:materials(name)
     `)
     .eq("slug", slug)
     .single();
@@ -44,6 +44,7 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
     sku: productData.sku,
     stock_quantity: productData.stock_quantity,
     category_id: productData.category_id,
+    material_id: productData.material_id,
     material: productData.material,
     color: productData.color,
     is_featured: productData.is_featured,

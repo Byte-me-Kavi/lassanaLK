@@ -19,6 +19,7 @@ export default async function HomePage(props: {
 }) {
   const searchParams = await props.searchParams;
   const categoryParam = searchParams.category as string;
+  const materialParam = searchParams.material as string;
   const sortParam = searchParams.sort as string;
 
   const supabase = createClient(
@@ -29,14 +30,19 @@ export default async function HomePage(props: {
     .from("products")
     .select(`
       id, name, slug, price, compare_price, short_description, stock_quantity, 
-      is_customizable, is_best_seller, is_new, category_id, material, created_at, updated_at, is_active,
+      is_customizable, is_best_seller, is_new, category_id, material_id, created_at, updated_at, is_active,
       images:product_images(id, product_id, url, is_primary),
-      category:categories(slug)
+      category:categories(slug),
+      material:materials(name, slug)
     `)
     .eq("is_active", true);
 
   if (categoryParam) {
-    query = query.eq("categories.slug", categoryParam);
+    query = query.in("categories.slug", categoryParam.split(","));
+  }
+
+  if (materialParam) {
+    query = query.in("materials.slug", materialParam.split(","));
   }
 
   // Sorting
@@ -50,7 +56,12 @@ export default async function HomePage(props: {
     query = query.order("created_at", { ascending: false }); // Default
   }
 
-  const { data: rawProducts } = await query;
+  const [{ data: rawProducts }, { data: materialsData }] = await Promise.all([
+    query,
+    supabase.from("materials").select("id, name, slug").order("name")
+  ]);
+
+  const materials = materialsData || [];
 
   let parsedProducts: Product[] = (rawProducts || []).map((p: any) => ({
     id: p.id,
@@ -63,6 +74,7 @@ export default async function HomePage(props: {
     is_customizable: p.is_customizable,
     is_best_seller: p.is_best_seller,
     is_new: p.is_new,
+    material_id: p.material_id,
     material: p.material,
     images: (p.images || []).map((img: any) => ({
       id: img.id,
@@ -78,7 +90,13 @@ export default async function HomePage(props: {
   } as Product));
 
   if (categoryParam) {
-    parsedProducts = parsedProducts.filter(p => p.category?.slug === categoryParam);
+    const cats = categoryParam.split(",");
+    parsedProducts = parsedProducts.filter(p => p.category?.slug && cats.includes(p.category.slug));
+  }
+  
+  if (materialParam) {
+    const mats = materialParam.split(",");
+    parsedProducts = parsedProducts.filter(p => p.material?.slug && mats.includes(p.material.slug));
   }
 
   let products = parsedProducts;
@@ -97,7 +115,7 @@ export default async function HomePage(props: {
                 Categories & Filters
               </h2>
               <Suspense fallback={<div>Loading filters...</div>}>
-                <ProductFilters />
+                <ProductFilters materials={materials} />
               </Suspense>
             </div>
           </aside>

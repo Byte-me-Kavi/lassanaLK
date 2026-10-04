@@ -51,19 +51,6 @@ export type CustomizationFieldType =
   (typeof CUSTOMIZATION_FIELD_TYPES)[number]["value"];
 
 /**
- * Product materials.
- */
-export const PRODUCT_MATERIALS = [
-  "Gold",
-  "Silver",
-  "Rose Gold",
-  "Stainless Steel",
-  "Sterling Silver",
-  "Gold Plated",
-  "Silver Plated",
-] as const;
-
-/**
  * Sri Lankan districts for checkout.
  */
 export const SRI_LANKAN_DISTRICTS = [
@@ -173,10 +160,3 @@ export const UPLOAD_LIMITS = {
   maxImagesPerProduct: 10,
 } as const;
 
-export const MATERIALS = [
-  { label: "18k Gold Plated", value: "gold-plated" },
-  { label: "Sterling Silver", value: "sterling-silver" },
-  { label: "Rose Gold", value: "rose-gold" },
-  { label: "Stainless Steel", value: "stainless-steel" },
-  { label: "Brass", value: "brass" },
-];

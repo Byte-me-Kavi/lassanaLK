@@ -125,7 +125,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         {product.material && (
           <div className="mb-1.5">
             <span className="inline-block bg-brand-cream/30 text-brand-purple text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
-              {product.material}
+              {typeof product.material === 'string' ? product.material : product.material?.name}
             </span>
           </div>
         )}

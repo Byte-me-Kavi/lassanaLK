@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { MATERIALS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { Material } from "@/lib/types";
 
 const CATEGORIES = [
   { id: "name-pendants", label: "Name Pendants" },
@@ -19,7 +19,13 @@ const CATEGORIES = [
   { id: "2d-metal-sign", label: "2D metal sign" },
 ];
 
-export function ProductFilters({ className }: { className?: string }) {
+export function ProductFilters({ 
+  className, 
+  materials = [] 
+}: { 
+  className?: string;
+  materials?: Material[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -95,18 +101,18 @@ export function ProductFilters({ className }: { className?: string }) {
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3 pt-1">
-              {MATERIALS.map((mat) => (
-                <div key={mat.value} className="flex items-center space-x-3">
+              {materials.map((mat) => (
+                <div key={mat.slug} className="flex items-center space-x-3">
                   <Checkbox 
-                    id={`mat-${mat.value}`}
-                    checked={selectedMaterials.includes(mat.value)}
-                    onCheckedChange={() => toggleMaterial(mat.value)}
+                    id={`mat-${mat.slug}`}
+                    checked={selectedMaterials.includes(mat.slug)}
+                    onCheckedChange={() => toggleMaterial(mat.slug)}
                   />
                   <label 
-                    htmlFor={`mat-${mat.value}`}
+                    htmlFor={`mat-${mat.slug}`}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground hover:text-foreground cursor-pointer"
                   >
-                    {mat.label}
+                    {mat.name}
                   </label>
                 </div>
               ))}

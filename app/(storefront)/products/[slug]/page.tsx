@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { ProductDetailClient } from "@/components/product/product-detail-client";
 import type { Product, CustomizationField } from "@/lib/types";
 
-export const revalidate = 3600; // Cache this page for 1 hour (ISR)
+
 
 export default async function ProductDetailPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;

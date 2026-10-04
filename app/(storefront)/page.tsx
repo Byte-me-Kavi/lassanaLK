@@ -4,7 +4,7 @@ import { ProductFilters } from "@/components/product/product-filters";
 import { FilterDrawer } from "@/components/product/filter-drawer";
 import { ProductSort } from "@/components/product/product-sort";
 import { ProductCard } from "@/components/product/product-card";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Product } from "@/lib/types";
 
 export const metadata = {
@@ -22,10 +22,7 @@ export default async function HomePage(props: {
   const materialParam = searchParams.material as string;
   const sortParam = searchParams.sort as string;
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createAdminClient();
   let query = supabase
     .from("products")
     .select(`

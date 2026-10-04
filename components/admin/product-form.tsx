@@ -67,14 +67,14 @@ export function ProductForm() {
     async function loadData() {
       const [catRes, matRes] = await Promise.all([
         supabase.from("categories").select("id, name").eq("is_active", true).order("sort_order"),
-        supabase.from("materials").select("id, name").order("name")
+        fetch("/api/materials").then(res => res.json())
       ]);
       
       if (catRes.data && !catRes.error) {
         setCategories(catRes.data);
       }
-      if (matRes.data && !matRes.error) {
-        setMaterials(matRes.data);
+      if (matRes && Array.isArray(matRes)) {
+        setMaterials(matRes);
       }
     }
     loadData();

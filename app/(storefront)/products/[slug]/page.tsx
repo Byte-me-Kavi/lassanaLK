@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { ProductDetailClient } from "@/components/product/product-detail-client";
 import type { Product, CustomizationField } from "@/lib/types";
 
@@ -9,10 +9,7 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
   const params = await props.params;
   const slug = params.slug;
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createAdminClient();
 
   const { data: productData, error: productError } = await supabase
     .from("products")

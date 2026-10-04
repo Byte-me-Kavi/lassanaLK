@@ -70,11 +70,11 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
   let customizationFields: CustomizationField[] = [];
   if (product.is_customizable) {
     const { data: fieldsData } = await supabase
-      .from("customization_fields")
+      .from("product_customization_fields")
       .select(`
         id, product_id, field_name, field_label, field_type, is_required, placeholder, 
         max_length, min_value, max_value, sort_order, created_at,
-        options:customization_options(id, field_id, label, value, price_modifier, sort_order)
+        options:product_customization_options(id, field_id, label, value, price_modifier, sort_order)
       `)
       .eq("product_id", product.id)
       .order("sort_order", { ascending: true });

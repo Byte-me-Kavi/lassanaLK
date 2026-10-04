@@ -16,7 +16,7 @@ export function CategoryCard({ name, slug, imageUrl, description, className }: C
     <Link
       href={`/shop/${slug}`}
       className={cn(
-        "group relative flex h-[200px] md:h-[280px] w-full flex-col justify-end overflow-hidden rounded-2xl",
+        "group relative flex h-50 md:h-70 w-full flex-col justify-end overflow-hidden rounded-2xl",
         className
       )}
     >
@@ -30,7 +30,7 @@ export function CategoryCard({ name, slug, imageUrl, description, className }: C
       />
       
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity group-hover:opacity-90" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent transition-opacity group-hover:opacity-90" />
       
       {/* Content */}
       <div className="relative z-10 p-4 md:p-6 flex flex-col">

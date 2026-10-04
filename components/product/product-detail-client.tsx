@@ -30,7 +30,6 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
   const addItem = useCartStore((s) => s.addItem);
   
   const [customizationValues, setCustomizationValues] = useState<Record<string, string>>({});
-  const [selectedSize, setSelectedSize] = useState<string>("Standard");
   const [isAdding, setIsAdding] = useState(false);
 
   const isWishlisted = mounted && isInWishlist;
@@ -57,12 +56,6 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
       };
     });
 
-    // Add selected size
-    formattedCustomizations.push({
-      fieldName: "size",
-      fieldLabel: "Size",
-      value: selectedSize,
-    });
 
     setTimeout(() => {
       addItem({
@@ -176,27 +169,6 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
               </div>
             )}
 
-            {/* Size Selector */}
-            <div className="mb-8">
-              <span className="block text-sm font-semibold text-foreground mb-3">Select Size</span>
-              <div className="flex flex-wrap gap-2">
-                {["Small", "Standard", "Large", "Custom"].map(size => (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => setSelectedSize(size)}
-                    className={cn(
-                      "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
-                      selectedSize === size 
-                        ? "border-brand-purple bg-brand-purple text-white shadow-sm" 
-                        : "border-border/60 bg-white text-muted-foreground hover:border-brand-purple/50 hover:text-brand-purple hover:bg-brand-purple/5"
-                    )}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">

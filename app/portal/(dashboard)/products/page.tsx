@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, Search, Edit, Trash2, MoreHorizontal } from "lucide-react";
+import { Plus, Search, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
+import { ProductRowActions } from "@/components/admin/product-row-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -87,14 +88,7 @@ export default async function AdminProductsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-brand-purple">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-50">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <ProductRowActions productId={product.id} productName={product.name} />
                 </TableCell>
               </TableRow>
             ))}

@@ -53,11 +53,19 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-export function ProductForm() {
+export function ProductForm({
+  productId,
+  initialData,
+  initialImages,
+}: {
+  productId?: string;
+  initialData?: Partial<ProductFormValues>;
+  initialImages?: string[];
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(initialImages || []);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [materials, setMaterials] = useState<{ id: string; name: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -82,7 +90,7 @@ export function ProductForm() {
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       slug: "",
       price: 0,
@@ -131,36 +139,67 @@ export function ProductForm() {
   const onSubmit = async (data: ProductFormValues) => {
     setIsSubmitting(true);
     try {
-      // 1. Insert product
-      const { data: productData, error: productError } = await supabase
-        .from("products")
-        .insert({
-          name: data.name,
-          slug: data.slug,
-          price: data.price,
-          compare_price: data.compare_price || null,
-          description: data.description || null,
-          short_description: data.short_description || null,
-          category_id: data.category,
-          sku: data.sku || null,
-          stock_quantity: data.stock_quantity,
-          material_id: data.material_id || null,
-          is_featured: data.is_featured,
-          is_new: data.is_new,
-          is_active: data.is_active,
-          is_customizable: data.is_customizable,
-        })
-        .select()
-        .single();
+      let targetProductId = productId;
 
-      if (productError) throw productError;
+      if (productId) {
+        // Update product
+        const { error: productError } = await supabase
+          .from("products")
+          .update({
+            name: data.name,
+            slug: data.slug,
+            price: data.price,
+            compare_price: data.compare_price || null,
+            description: data.description || null,
+            short_description: data.short_description || null,
+            category_id: data.category,
+            sku: data.sku || null,
+            stock_quantity: data.stock_quantity,
+            material_id: data.material_id || null,
+            is_featured: data.is_featured,
+            is_new: data.is_new,
+            is_active: data.is_active,
+            is_customizable: data.is_customizable,
+          })
+          .eq("id", productId);
 
-      const productId = productData.id;
+        if (productError) throw productError;
+      } else {
+        // 1. Insert product
+        const { data: productData, error: productError } = await supabase
+          .from("products")
+          .insert({
+            name: data.name,
+            slug: data.slug,
+            price: data.price,
+            compare_price: data.compare_price || null,
+            description: data.description || null,
+            short_description: data.short_description || null,
+            category_id: data.category,
+            sku: data.sku || null,
+            stock_quantity: data.stock_quantity,
+            material_id: data.material_id || null,
+            is_featured: data.is_featured,
+            is_new: data.is_new,
+            is_active: data.is_active,
+            is_customizable: data.is_customizable,
+          })
+          .select()
+          .single();
 
-      // 2. Insert images
+        if (productError) throw productError;
+        targetProductId = productData.id;
+      }
+
+      // 2. Manage images
+      if (productId) {
+        // Delete old images
+        await supabase.from("product_images").delete().eq("product_id", productId);
+      }
+      
       if (images.length > 0) {
         const imageInserts = images.map((url, idx) => ({
-          product_id: productId,
+          product_id: targetProductId,
           url,
           sort_order: idx,
           is_primary: idx === 0,
@@ -169,10 +208,14 @@ export function ProductForm() {
         if (imagesError) throw imagesError;
       }
 
-      // 3. Insert customization fields
+      // 3. Manage customization fields
+      if (productId) {
+        await supabase.from("product_customization_fields").delete().eq("product_id", productId);
+      }
+      
       if (data.is_customizable && data.customization_fields && data.customization_fields.length > 0) {
         const fieldInserts = data.customization_fields.map((field, idx) => ({
-          product_id: productId,
+          product_id: targetProductId,
           field_name: field.field_name,
           field_label: field.field_label,
           field_type: field.field_type,
@@ -209,8 +252,12 @@ export function ProductForm() {
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-heading font-bold text-brand-purple">Add New Product</h2>
-          <p className="text-muted-foreground text-sm">Create a new product for your catalog.</p>
+          <h2 className="text-2xl font-heading font-bold text-brand-purple">
+            {productId ? "Edit Product" : "Add New Product"}
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            {productId ? "Update your product details." : "Create a new product for your catalog."}
+          </p>
         </div>
         <div className="flex gap-4">
           <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>

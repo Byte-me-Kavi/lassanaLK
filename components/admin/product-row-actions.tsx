@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { createClient } from "@/lib/supabase/client";
 
 export function ProductRowActions({ productId, productName }: { productId: string; productName: string }) {
@@ -19,8 +20,9 @@ export function ProductRowActions({ productId, productName }: { productId: strin
         const { error } = await supabase.from("products").delete().eq("id", productId);
         if (error) throw error;
         router.refresh();
+        toast.add({ title: "Success", description: "Product deleted.", type: "success" });
       } catch (error: any) {
-        alert("Failed to delete product: " + error.message);
+        toast.add({ title: "Error", description: "Failed to delete product: " + error.message, type: "error" });
       } finally {
         setIsDeleting(false);
       }

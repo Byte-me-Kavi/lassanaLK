@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Plus, Trash2, Image as ImageIcon, Video, Save, X, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "@/components/ui/toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -129,7 +130,7 @@ export function ProductForm({
       setImages([...images, data.url]);
     } catch (err: any) {
       console.error(err);
-      alert("Error uploading image: " + err.message);
+      toast.add({ title: "Error", description: "Error uploading image: " + err.message, type: "error" });
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -227,12 +228,12 @@ export function ProductForm({
         // Note: For full completeness we would also insert options (for select/radio) by capturing the returned field IDs.
       }
 
-      alert("Product saved successfully!");
+      toast.add({ title: "Success", description: "Product saved successfully!", type: "success" });
       router.push("/portal/products");
       router.refresh();
     } catch (error: any) {
       console.error(error);
-      alert("Failed to save product: " + error.message);
+      toast.add({ title: "Error", description: "Failed to save product: " + error.message, type: "error" });
     } finally {
       setIsSubmitting(false);
     }

@@ -7,24 +7,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { cn } from "@/lib/utils";
 import { Material } from "@/lib/types";
 
-const CATEGORIES = [
-  { id: "name-pendants", label: "Name Pendants" },
-  { id: "rings", label: "Rings" },
-  { id: "earrings", label: "Earrings" },
-  { id: "bracelets", label: "Bracelets" },
-  { id: "sun-glass", label: "Sun glass" },
-  { id: "chain", label: "Chain" },
-  { id: "vehicle-metal-customize", label: "Vehicle metal customize" },
-  { id: "metal-customize", label: "Metal customize" },
-  { id: "2d-metal-sign", label: "2D metal sign" },
-];
-
 export function ProductFilters({ 
   className, 
-  materials = [] 
+  materials = [],
+  categories = [] 
 }: { 
   className?: string;
   materials?: Material[];
+  categories?: { id: string; name: string; slug: string; sort_order: number }[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -75,18 +65,18 @@ export function ProductFilters({
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3 pt-1">
-              {CATEGORIES.map((cat) => (
-                <div key={cat.id} className="flex items-center space-x-3">
+              {categories.map((cat) => (
+                <div key={cat.slug} className="flex items-center space-x-3">
                   <Checkbox 
-                    id={`cat-${cat.id}`} 
-                    checked={selectedCategories.includes(cat.id)}
-                    onCheckedChange={() => toggleCategory(cat.id)}
+                    id={`cat-${cat.slug}`} 
+                    checked={selectedCategories.includes(cat.slug)}
+                    onCheckedChange={() => toggleCategory(cat.slug)}
                   />
                   <label 
-                    htmlFor={`cat-${cat.id}`}
+                    htmlFor={`cat-${cat.slug}`}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground hover:text-foreground cursor-pointer"
                   >
-                    {cat.label}
+                    {cat.name}
                   </label>
                 </div>
               ))}

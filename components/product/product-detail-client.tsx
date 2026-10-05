@@ -8,6 +8,7 @@ import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductCustomizer } from "@/components/product/product-customizer";
 import { PriceDisplay } from "@/components/ui/price-display";
 import { StarRating } from "@/components/ui/star-rating";
+import { ProductReviews } from "@/components/product/product-reviews";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -18,12 +19,21 @@ import { productInquiryLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type { Product, CustomizationField, CustomizationFieldWithOptions } from "@/lib/types";
 
+interface Review {
+  id: string;
+  rating: number;
+  customer_name: string;
+  created_at: string;
+  review_text: string;
+}
+
 interface ProductDetailClientProps {
   product: Product;
   customizationFields: CustomizationField[];
+  reviews: Review[];
 }
 
-export function ProductDetailClient({ product, customizationFields }: ProductDetailClientProps) {
+export function ProductDetailClient({ product, customizationFields, reviews }: ProductDetailClientProps) {
   const mounted = useMounted();
   const toggleWishlist = useWishlistStore((s) => s.toggleItem);
   const isInWishlist = useWishlistStore((s) => s.isInWishlist(product.id));
@@ -127,8 +137,14 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
               </h1>
               
               <div className="flex items-center gap-4 mb-4">
-                <StarRating rating={4.9} showValue />
-                <span className="text-sm text-muted-foreground underline cursor-pointer">128 Reviews</span>
+                {reviews.length > 0 ? (
+                  <>
+                    <StarRating rating={reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length} showValue />
+                    <span className="text-sm text-muted-foreground underline cursor-pointer">{reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}</span>
+                  </>
+                ) : (
+                  <span className="text-sm text-muted-foreground">No reviews yet</span>
+                )}
               </div>
 
               <PriceDisplay price={product.price} comparePrice={product.compare_price} size="lg" />
@@ -217,6 +233,9 @@ export function ProductDetailClient({ product, customizationFields }: ProductDet
             
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <ProductReviews productId={product.id} initialReviews={reviews} />
       </div>
     </div>
   );

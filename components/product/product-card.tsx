@@ -110,11 +110,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       </Link>
 
       {/* Product Details */}
-      <div className="flex flex-col flex-1">
-        {/* Optional Rating (mocked for now) */}
-        <div className="mb-1.5">
-          <StarRating rating={4.8} size="sm" showValue />
-        </div>
+      <div className="flex flex-col flex-1 pt-1">
 
         <Link href={`/products/${product.slug}`} className="block group-hover:text-brand-purple transition-colors">
           <h3 className="font-semibold text-foreground text-base md:text-lg line-clamp-2 mb-1">

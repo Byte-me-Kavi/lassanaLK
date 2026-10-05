@@ -53,12 +53,14 @@ export default async function HomePage(props: {
     query = query.order("created_at", { ascending: false }); // Default
   }
 
-  const [{ data: rawProducts }, { data: materialsData }] = await Promise.all([
+  const [{ data: rawProducts }, { data: materialsData }, { data: categoriesData }] = await Promise.all([
     query,
-    supabase.from("materials").select("id, name, slug").order("name")
+    supabase.from("materials").select("id, name, slug").order("name"),
+    supabase.from("categories").select("id, name, slug, sort_order").eq("is_active", true).order("sort_order", { ascending: true })
   ]);
 
   const materials = materialsData || [];
+  const categories = categoriesData || [];
 
   let parsedProducts: Product[] = (rawProducts || []).map((p: any) => ({
     id: p.id,
@@ -112,7 +114,7 @@ export default async function HomePage(props: {
                 Categories & Filters
               </h2>
               <Suspense fallback={<div>Loading filters...</div>}>
-                <ProductFilters materials={materials} />
+                <ProductFilters materials={materials} categories={categories} />
               </Suspense>
             </div>
           </aside>

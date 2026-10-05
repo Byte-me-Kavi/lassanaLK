@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ReviewRowActions } from "@/components/admin/review-row-actions";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -40,6 +41,8 @@ export default async function AdminReviewsPage() {
     text: r.review_text,
     date: new Date(r.created_at).toLocaleDateString(),
     status: r.is_featured ? "Featured" : r.is_approved ? "Approved" : "Pending",
+    is_approved: r.is_approved,
+    is_featured: r.is_featured,
   }));
   return (
     <div className="space-y-6">
@@ -99,24 +102,7 @@ export default async function AdminReviewsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    {review.status === "Pending" && (
-                      <>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50" title="Approve">
-                          <CheckCircle className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50" title="Reject">
-                          <XCircle className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-brand-purple">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-50">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <ReviewRowActions review={review} />
                 </TableCell>
               </TableRow>
             ))}

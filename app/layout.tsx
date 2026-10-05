@@ -71,13 +71,18 @@ export const metadata: Metadata = {
   },
 };
 
+import { Toaster } from "@/components/ui/toast";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${outfit.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

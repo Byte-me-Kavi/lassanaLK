@@ -1,4 +1,4 @@
-import { Plus, Search, Edit, Trash2, MoreHorizontal } from "lucide-react";
+import { Plus, Search, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 
 import { createClient } from "@/lib/supabase/server";
+import { CategoryDialog, CategoryRowActions } from "@/components/admin/category-dialog";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,9 @@ export default async function AdminCategoriesPage() {
     id: cat.id,
     name: cat.name,
     slug: cat.slug,
+    description: cat.description,
+    sort_order: cat.sort_order,
+    is_active: cat.is_active,
     products: cat.products?.length || 0,
     status: cat.is_active ? "Active" : "Inactive"
   }));
@@ -37,10 +41,14 @@ export default async function AdminCategoriesPage() {
           <p className="text-muted-foreground mt-1">Manage product categories for your store.</p>
         </div>
         
-        <Button className="bg-brand-purple hover:bg-brand-purple-deep">
-          <Plus className="mr-2 h-4 w-4" />
-          Add Category
-        </Button>
+        <CategoryDialog 
+          trigger={
+            <Button className="bg-brand-purple hover:bg-brand-purple-deep">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Category
+            </Button>
+          } 
+        />
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-border/40 overflow-hidden">
@@ -73,14 +81,7 @@ export default async function AdminCategoriesPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-brand-purple">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-50">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <CategoryRowActions category={category} />
                 </TableCell>
               </TableRow>
             ))}

@@ -24,6 +24,13 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
     .eq("slug", slug)
     .single();
 
+  const { data: reviewsData } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("product_id", productData?.id)
+    .eq("is_approved", true)
+    .order("created_at", { ascending: false });
+
   if (productError || !productData) {
     console.error("Product Error:", productError);
     return notFound();
@@ -109,6 +116,7 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
     <ProductDetailClient 
       product={product} 
       customizationFields={customizationFields} 
+      reviews={reviewsData || []}
     />
   );
 }

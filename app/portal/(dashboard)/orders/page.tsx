@@ -99,9 +99,11 @@ export default async function AdminOrdersPage() {
                     <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50" title="Contact via WhatsApp">
                       <MessageCircle className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-brand-purple">
-                      <Eye className="h-4 w-4" />
-                    </Button>
+                    <Link href={`/portal/orders/${order.id}`}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-brand-purple">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </Link>
                   </div>
                 </TableCell>
               </TableRow>

@@ -13,7 +13,8 @@ export async function FeaturedDesigns() {
     .select(`
       id, name, slug, price, compare_price, short_description, stock_quantity, 
       is_customizable, is_best_seller, is_new, category_id, is_active, created_at, updated_at,
-      images:product_images(id, product_id, url, is_primary)
+      images:product_images(id, product_id, url, is_primary),
+      reviews:reviews(rating, is_approved)
     `)
     .eq("is_featured", true)
     .eq("is_active", true)
@@ -41,6 +42,10 @@ export async function FeaturedDesigns() {
     is_active: p.is_active,
     created_at: p.created_at,
     updated_at: p.updated_at,
+    review_count: (p.reviews || []).filter((r: any) => r.is_approved).length,
+    average_rating: (p.reviews || []).filter((r: any) => r.is_approved).length > 0 
+      ? (p.reviews || []).filter((r: any) => r.is_approved).reduce((sum: number, r: any) => sum + r.rating, 0) / (p.reviews || []).filter((r: any) => r.is_approved).length 
+      : 0,
   } as Product));
   return (
     <section className="section-padding bg-white">

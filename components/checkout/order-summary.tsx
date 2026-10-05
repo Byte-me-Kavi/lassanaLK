@@ -29,7 +29,7 @@ export function OrderSummary() {
           <div key={item.cartId} className="flex gap-4">
             <div className="relative h-16 w-16 shrink-0 rounded-lg bg-brand-cream overflow-hidden border border-border/40">
               {item.imageUrl ? (
-                <Image src={item.imageUrl} alt={item.productName} fill className="object-cover" />
+                <Image src={item.imageUrl} alt={item.productName} fill sizes="64px" className="object-cover" />
               ) : null}
               <div className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-brand-purple text-[10px] font-bold text-white z-10">
                 {item.quantity}

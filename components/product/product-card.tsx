@@ -118,6 +118,13 @@ export function ProductCard({ product, className, priority = false }: ProductCar
           </h3>
         </Link>
         
+        {(product.review_count ?? 0) > 0 && (
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <StarRating rating={product.average_rating ?? 0} size="sm" />
+            <span className="text-[10px] text-muted-foreground font-medium">({product.review_count})</span>
+          </div>
+        )}
+        
         {product.material && (
           <div className="mb-1.5">
             <span className="inline-block bg-brand-cream/30 text-brand-purple text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">

@@ -67,19 +67,17 @@ export function ProductDetailClient({ product, customizationFields, reviews }: P
     });
 
 
-    setTimeout(() => {
-      addItem({
-        productId: product.id,
-        productName: product.name,
-        productSlug: product.slug,
-        price: product.price,
-        quantity: 1,
-        imageUrl: product.images?.[0]?.url || "",
-        isCustomizable: product.is_customizable,
-        customizations: formattedCustomizations,
-      });
-      setIsAdding(false);
-    }, 500);
+    addItem({
+      productId: product.id,
+      productName: product.name,
+      productSlug: product.slug,
+      price: product.price,
+      quantity: 1,
+      imageUrl: product.images?.[0]?.url || "",
+      isCustomizable: product.is_customizable,
+      customizations: formattedCustomizations,
+    });
+    setIsAdding(false);
   };
 
   return (

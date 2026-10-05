@@ -29,8 +29,9 @@ export default async function HomePage(props: {
       id, name, slug, price, compare_price, short_description, stock_quantity, 
       is_customizable, is_best_seller, is_new, category_id, material_id, created_at, updated_at, is_active,
       images:product_images(id, product_id, url, is_primary),
-      category:categories(slug),
-      material:materials(name, slug)
+      categories${categoryParam ? '!inner' : ''}(name, slug),
+      materials${materialParam ? '!inner' : ''}(name, slug),
+      reviews:reviews(rating, is_approved)
     `)
     .eq("is_active", true);
 
@@ -74,7 +75,7 @@ export default async function HomePage(props: {
     is_best_seller: p.is_best_seller,
     is_new: p.is_new,
     material_id: p.material_id,
-    material: p.material,
+    material: p.materials,
     images: (p.images || []).map((img: any) => ({
       id: img.id,
       product_id: img.product_id,
@@ -82,21 +83,15 @@ export default async function HomePage(props: {
       is_primary: img.is_primary,
     })),
     category_id: p.category_id,
-    category: p.category,
+    category: p.categories,
     is_active: p.is_active,
     created_at: p.created_at,
     updated_at: p.updated_at,
+    review_count: (p.reviews || []).filter((r: any) => r.is_approved).length,
+    average_rating: (p.reviews || []).filter((r: any) => r.is_approved).length > 0 
+      ? (p.reviews || []).filter((r: any) => r.is_approved).reduce((sum: number, r: any) => sum + r.rating, 0) / (p.reviews || []).filter((r: any) => r.is_approved).length 
+      : 0,
   } as Product));
-
-  if (categoryParam) {
-    const cats = categoryParam.split(",");
-    parsedProducts = parsedProducts.filter(p => p.category?.slug && cats.includes(p.category.slug));
-  }
-  
-  if (materialParam) {
-    const mats = materialParam.split(",");
-    parsedProducts = parsedProducts.filter(p => p.material?.slug && mats.includes(p.material.slug));
-  }
 
   let products = parsedProducts;
 

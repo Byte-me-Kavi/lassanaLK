@@ -52,6 +52,8 @@ export interface Product {
   images?: { id: string; url: string; is_primary: boolean; [key: string]: any }[];
   category?: any;
   material?: any;
+  review_count?: number;
+  average_rating?: number;
 }
 
 /** Product with all its relations loaded */

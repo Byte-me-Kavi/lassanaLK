@@ -45,6 +45,7 @@ export function PersonalizedSection() {
                 src="/placeholder.jpg"
                 alt="Personalized Jewelry Closeup"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
@@ -53,6 +54,7 @@ export function PersonalizedSection() {
                 src="/placeholder.jpg"
                 alt="Couple Name Necklace"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>

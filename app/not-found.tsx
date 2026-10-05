@@ -7,33 +7,27 @@ import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
-      <Image
-        src="/logo/full logo.png"
-        alt="Lassana LK"
-        width={200}
-        height={70}
-        className="mb-10 w-auto h-16 md:h-20"
-      />
-      <h1 className="text-6xl font-bold text-brand-purple mb-4">404</h1>
-      <h2 className="text-2xl font-semibold text-foreground mb-2">
-        Page Not Found
-      </h2>
-      <p className="text-muted-foreground mb-8 max-w-md">
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+    <div className="flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
+      <div className="relative mb-8 h-36 w-20" style={{ transformOrigin: "50% 0%", animation: "pendant-drop 1100ms var(--ease-out) both" }}>
+        <Image src="/logo/only logo.png" alt="" fill sizes="80px" className="object-contain" priority />
+      </div>
+      <p className="tabular font-heading font-semibold text-2xl text-brand-gold-deep">404</p>
+      <h1 className="mt-2 text-4xl md:text-5xl">This page slipped off the chain</h1>
+      <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+        The link may be old, or the piece may no longer be in the collection.
       </p>
-      <div className="flex gap-4">
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Link
-          href="/"
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          href="/#shop"
+          className="press inline-flex h-12 items-center justify-center rounded-full bg-brand-purple px-7 text-[15px] font-semibold text-white hover:bg-brand-purple-light"
         >
-          Go Home
+          Browse the collection
         </Link>
         <Link
-          href="/"
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-background px-6 text-sm font-medium transition-colors hover:bg-muted"
+          href="/contact"
+          className="press inline-flex h-12 items-center justify-center rounded-full border border-brand-purple/25 bg-white px-7 text-[15px] font-semibold text-brand-purple hover:border-brand-purple"
         >
-          Browse Shop
+          Contact us
         </Link>
       </div>
     </div>

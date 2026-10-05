@@ -1,54 +1,113 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 
+export const SPLASH_KEY = "llk-splash-seen";
+
+const noopSubscribe = () => () => {};
+
+function readSeen() {
+  try {
+    return sessionStorage.getItem(SPLASH_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * True once the intro has played in this browser session.
+ * The server always reports `false`; an inline script in the root layout
+ * hides the splash before paint on repeat visits so there is no flash.
+ */
+export function useSplashSeen() {
+  return useSyncExternalStore(noopSubscribe, readSeen, () => false);
+}
+
+const HOLD_MS = 1700;
+const LIFT_MS = 700;
+
 export function HomeSplash() {
-  const [show, setShow] = useState(true);
-  const [animateOut, setAnimateOut] = useState(false);
+  const seen = useSplashSeen();
+  const [phase, setPhase] = useState<"intro" | "lifting" | "done">("intro");
+
+  // Hold, then lift. Any key press skips ahead.
+  useEffect(() => {
+    if (seen || phase !== "intro") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const skip = () => setPhase("lifting");
+    const timer = setTimeout(skip, reduced ? 0 : HOLD_MS);
+    window.addEventListener("keydown", skip, { once: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", skip);
+    };
+  }, [seen, phase]);
 
   useEffect(() => {
-    // Start exit animation very quickly
-    const timer1 = setTimeout(() => {
-      setAnimateOut(true);
-    }, 800);
+    if (phase !== "lifting") return;
+    const timer = setTimeout(() => {
+      try {
+        sessionStorage.setItem(SPLASH_KEY, "1");
+      } catch {}
+      document.documentElement.dataset.splash = "seen";
+      setPhase("done");
+    }, LIFT_MS);
+    return () => clearTimeout(timer);
+  }, [phase]);
 
-    // Completely remove from DOM after animation completes
-    const timer2 = setTimeout(() => {
-      setShow(false);
-    }, 1800);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, []);
-
-  if (!show) return null;
+  if (seen || phase === "done") return null;
 
   return (
-    <div 
-      className={`fixed inset-0 z-100 flex flex-col items-center justify-center bg-brand-cream transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-        animateOut ? "-translate-y-full" : "translate-y-0"
-      }`}
+    <div
+      role="presentation"
+      onClick={() => setPhase("lifting")}
+      className="home-splash fixed inset-0 z-100 flex flex-col items-center justify-center overflow-hidden bg-brand-purple-deep"
+      style={{
+        transform: phase === "lifting" ? "translateY(-100%)" : "translateY(0)",
+        transition: `transform ${LIFT_MS}ms var(--ease-in-out)`,
+      }}
     >
-      <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <Image 
-          src="/logo/full logo.png" 
-          alt="Lassana LK" 
-          width={320} 
-          height={120} 
-          className="mb-8 object-contain drop-shadow-md"
-          style={{ width: "auto" }}
-          priority
-        />
-        <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-brand-purple mb-4 tracking-tight drop-shadow-sm">
-          Exclusive Jewelry Collection
-        </h1>
-        <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto font-light text-center px-4">
-          Discover our premium range of handcrafted pieces, designed to celebrate your unique story.
+      {/* Soft lamp-light behind the pendant */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(closest-side, rgb(181 127 57 / 0.28), rgb(80 16 112 / 0.22) 55%, transparent)",
+        }}
+      />
+
+      <div className="relative flex flex-col items-center">
+        <div
+          className="relative h-48 w-28 md:h-64 md:w-36"
+          style={{
+            transformOrigin: "50% 0%",
+            animation: "pendant-drop 1100ms var(--ease-out) both",
+          }}
+        >
+          <Image
+            src="/logo/only logo.png"
+            alt=""
+            fill
+            priority
+            sizes="144px"
+            className="object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
+          />
+        </div>
+
+        <p
+          className="mt-6 font-display text-4xl md:text-5xl text-white tracking-tight"
+          style={{ animation: "fade-blur-in 700ms var(--ease-out) 450ms both" }}
+        >
+          Lassana <span className="text-brand-gold-light">LK</span>
         </p>
-        <div className="mt-8 h-1 w-16 bg-brand-gold rounded-full"></div>
+        <p
+          className="mt-3 text-sm md:text-base text-white/75"
+          style={{ animation: "fade-blur-in 700ms var(--ease-out) 650ms both" }}
+        >
+          Beautiful jewelry, made personal.
+        </p>
       </div>
     </div>
   );

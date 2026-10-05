@@ -58,24 +58,24 @@ export function SearchDialog() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
-        className="hidden sm:flex items-center justify-center h-10 w-10 rounded-lg hover:bg-muted transition-colors"
+        className="press hidden h-10 w-10 items-center justify-center rounded-full text-brand-purple hover:bg-brand-cream/70 sm:flex"
         aria-label="Search products"
       >
-        <Search className="h-5 w-5 text-brand-purple" />
+        <Search className="h-5 w-5" />
       </DialogTrigger>
       
-      <DialogContent className="sm:max-w-xl p-0 overflow-hidden" showCloseButton={false}>
+      <DialogContent className="top-[18%] translate-y-0 overflow-hidden rounded-2xl p-0 sm:max-w-xl" showCloseButton={false}>
         <div className="sr-only">
           <DialogTitle>Search Products</DialogTitle>
           <DialogDescription>Search for personalized jewelry and gifts</DialogDescription>
         </div>
         
-        <div className="flex items-center border-b border-border/40 px-3">
-          <Search className="h-5 w-5 text-muted-foreground shrink-0" />
+        <div className="flex items-center border-b border-border px-4">
+          <Search className="h-5 w-5 shrink-0 text-brand-purple" />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for products..."
+            placeholder="Search pendants, rings, signs…"
             className="border-0 shadow-none focus-visible:ring-0 h-14 text-base bg-transparent"
             autoFocus
           />
@@ -84,8 +84,8 @@ export function SearchDialog() {
         
         <div className="max-h-[60vh] overflow-y-auto">
           {query.trim() !== "" && results.length === 0 && !isLoading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">
-              No products found for "{query}"
+            <div className="p-8 text-center text-[15px] text-muted-foreground">
+              Nothing matches &ldquo;{query}&rdquo;. Try a shorter word, like &ldquo;name&rdquo; or &ldquo;ring&rdquo;.
             </div>
           ) : results.length > 0 ? (
             <div className="p-2 space-y-1">
@@ -96,7 +96,7 @@ export function SearchDialog() {
                     key={product.id}
                     href={`/products/${product.slug}`}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors"
+                    className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-brand-cream/60 focus-visible:bg-brand-cream/60"
                   >
                     <div className="relative h-12 w-12 rounded-md bg-brand-cream overflow-hidden shrink-0">
                       {image && (
@@ -110,8 +110,8 @@ export function SearchDialog() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">{formatPrice(product.price, false)}</p>
+                      <p className="truncate text-[15px] font-medium text-foreground">{product.name}</p>
+                      <p className="tabular text-sm font-semibold text-brand-purple">{formatPrice(product.price, false)}</p>
                     </div>
                   </Link>
                 );
@@ -119,8 +119,8 @@ export function SearchDialog() {
             </div>
           ) : (
             query.trim() === "" && (
-              <div className="p-6 text-center text-sm text-muted-foreground">
-                Type something to search...
+              <div className="p-8 text-center text-[15px] text-muted-foreground">
+                Search by product name.
               </div>
             )
           )}

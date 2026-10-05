@@ -1,7 +1,7 @@
 import { ProductForm } from "@/components/admin/product-form";
 
 export const metadata = {
-  title: "Add Product | Lassana LK Admin",
+  title: "Add Product",
 };
 
 export default function NewProductPage() {

@@ -34,6 +34,7 @@ export interface Product {
   short_description: string | null;
   price: number;
   compare_price: number | null;
+  delivery_fee: number;
   sku: string | null;
   stock_quantity: number;
   category_id: string | null;
@@ -202,6 +203,7 @@ export interface CartItem {
   productSlug: string;
   imageUrl: string | null;
   price: number;
+  delivery_fee: number;
   quantity: number;
   isCustomizable: boolean;
   customizations: CustomizationValue[];

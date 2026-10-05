@@ -11,9 +11,9 @@ import {
 
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured" },
-  { value: "newest", label: "Newest Arrivals" },
-  { value: "price-asc", label: "Price: Low to High" },
-  { value: "price-desc", label: "Price: High to Low" },
+  { value: "newest", label: "Newest first" },
+  { value: "price-asc", label: "Price: low to high" },
+  { value: "price-desc", label: "Price: high to low" },
 ];
 
 export function ProductSort() {
@@ -29,15 +29,20 @@ export function ProductSort() {
     } else {
       params.set("sort", value);
     }
-    router.push(`/?${params.toString()}`);
+    const query = params.toString();
+    router.push(query ? `/?${query}` : "/", { scroll: false });
   };
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-muted-foreground hidden sm:inline-block">Sort by:</span>
-      <Select value={currentSort} onValueChange={handleSortChange}>
-        <SelectTrigger className="w-45 bg-white border-border/40 focus:ring-brand-purple">
-          <SelectValue placeholder="Sort Options" />
+      <span className="hidden text-sm text-muted-foreground sm:inline-block">Sort by</span>
+      {/* `items` lets the trigger show the label ("Featured") instead of the raw value */}
+      <Select items={SORT_OPTIONS} value={currentSort} onValueChange={handleSortChange}>
+        <SelectTrigger
+          aria-label="Sort products"
+          className="h-11 w-48 rounded-full border-border bg-white px-4 text-[15px] font-medium text-brand-purple"
+        >
+          <SelectValue placeholder="Sort" />
         </SelectTrigger>
         <SelectContent>
           {SORT_OPTIONS.map((option) => (

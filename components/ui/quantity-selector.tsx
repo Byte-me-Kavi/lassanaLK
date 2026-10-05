@@ -32,14 +32,14 @@ export function QuantitySelector({
     if (quantity < max) onQuantityChange(quantity + 1);
   };
 
-  const buttonSize = size === "sm" ? "h-7 w-7" : "h-8 w-8";
-  const iconSize = size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5";
-  const textSize = size === "sm" ? "text-xs w-7" : "text-sm w-9";
+  const buttonSize = size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  const iconSize = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4";
+  const textSize = size === "sm" ? "text-sm w-7" : "text-[15px] w-9";
 
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-lg border border-border bg-background",
+        "inline-flex items-center rounded-full border border-border bg-white text-brand-purple",
         className
       )}
       role="group"
@@ -51,8 +51,8 @@ export function QuantitySelector({
         disabled={quantity <= min}
         className={cn(
           buttonSize,
-          "flex items-center justify-center rounded-l-lg transition-colors",
-          "hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+          "press flex items-center justify-center rounded-full",
+          "hover:bg-brand-cream/70 disabled:opacity-35 disabled:cursor-not-allowed"
         )}
         aria-label="Decrease quantity"
       >
@@ -61,7 +61,7 @@ export function QuantitySelector({
       <span
         className={cn(
           textSize,
-          "flex items-center justify-center font-medium tabular-nums border-x border-border"
+          "flex items-center justify-center font-semibold tabular-nums"
         )}
         aria-live="polite"
         aria-label={`Quantity: ${quantity}`}
@@ -74,8 +74,8 @@ export function QuantitySelector({
         disabled={quantity >= max}
         className={cn(
           buttonSize,
-          "flex items-center justify-center rounded-r-lg transition-colors",
-          "hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+          "press flex items-center justify-center rounded-full",
+          "hover:bg-brand-cream/70 disabled:opacity-35 disabled:cursor-not-allowed"
         )}
         aria-label="Increase quantity"
       >

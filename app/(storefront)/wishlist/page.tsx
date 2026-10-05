@@ -26,12 +26,12 @@ export default function WishlistPage() {
   };
 
   return (
-    <div className="bg-brand-ivory min-h-screen pb-20 pt-8">
+    <div className="min-h-screen pb-20 pt-8">
       <div className="container-main max-w-5xl">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-brand-purple mb-2">
-              Your Wishlist
+            <h1 className="text-3xl md:text-4xl font-heading font-semibold text-brand-purple mb-2">
+              Your wishlist
             </h1>
             <p className="text-muted-foreground">
               {items.length} {items.length === 1 ? "item" : "items"} saved for later.
@@ -39,29 +39,29 @@ export default function WishlistPage() {
           </div>
           {items.length > 0 && (
             <Button variant="ghost" onClick={clearWishlist} className="text-red-500 hover:text-red-600 hover:bg-red-50 w-fit">
-              Clear All
+              Clear all
             </Button>
           )}
         </div>
 
         {items.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-border/40 p-12 text-center flex flex-col items-center">
+          <div className="bg-white rounded-2xl border border-border p-12 text-center flex flex-col items-center">
             <div className="h-20 w-20 bg-brand-cream rounded-full flex items-center justify-center text-brand-purple mb-6">
               <HeartCrack className="h-10 w-10" />
             </div>
-            <h2 className="text-2xl font-bold font-heading mb-2">Your wishlist is empty</h2>
+            <h2 className="text-2xl font-heading font-semibold mb-2">Your wishlist is empty</h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
               You haven't saved any items yet. Start browsing our collection and click the heart icon to save your favorites.
             </p>
-            <Button render={<Link href="/" />} size="lg" className="bg-brand-purple hover:bg-brand-purple-deep">
+            <Button render={<Link href="/#shop" />} size="lg" className="press h-12 rounded-full bg-brand-purple px-7 font-semibold hover:bg-brand-purple-light">
               Explore Collection
             </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((item) => (
-              <div key={item.productId} className="bg-white rounded-2xl border border-border/40 p-4 flex flex-col group">
-                <Link href={`/products/${item.productSlug}`} className="relative aspect-square rounded-xl bg-brand-cream mb-4 overflow-hidden block">
+              <div key={item.productId} className="flex flex-col group">
+                <Link href={`/products/${item.productSlug}`} className="relative mb-4 block aspect-4/5 overflow-hidden rounded-2xl bg-brand-cream/50">
                   {item.imageUrl ? (
                     <Image 
                       src={item.imageUrl} 
@@ -87,7 +87,7 @@ export default function WishlistPage() {
                 
                 <div className="mt-auto flex gap-2">
                   <Button 
-                    className="flex-1 bg-brand-purple hover:bg-brand-purple-deep" 
+                    className="press h-11 flex-1 rounded-full bg-brand-purple font-semibold hover:bg-brand-purple-light" 
                     onClick={() => handleMoveToCart(item)}
                   >
                     View Product
@@ -95,7 +95,7 @@ export default function WishlistPage() {
                   <Button 
                     variant="outline" 
                     size="icon" 
-                    className="shrink-0 text-muted-foreground hover:text-red-500 hover:border-red-200 hover:bg-red-50"
+                    className="press h-11 w-11 shrink-0 rounded-full text-muted-foreground hover:border-destructive/30 hover:bg-destructive/5 hover:text-destructive"
                     onClick={() => removeItem(item.productId)}
                     aria-label="Remove from wishlist"
                   >

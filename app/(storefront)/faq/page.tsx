@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
   Accordion,
@@ -5,12 +6,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { generalInquiryLink } from "@/lib/whatsapp";
+import { JsonLd } from "@/components/seo/json-ld";
 
-export const metadata = {
-  title: "FAQ | Lassana LK",
-  description: "Frequently asked questions about our personalized jewelry, delivery, and payment methods.",
+export const metadata: Metadata = {
+  title: "FAQ",
+  description:
+    "Answers about ordering personalized jewelry from Lassana LK: cash on delivery, 3–7 day production, islandwide delivery, materials and returns.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQS = [
@@ -32,7 +36,7 @@ const FAQS = [
     questions: [
       {
         q: "How long does it take to make personalized jewelry?",
-        a: "Since each piece is custom-made to your exact specifications, crafting takes between 7 to 10 business days before it is ready to be shipped.",
+        a: "Since each piece is custom-made to your exact specifications, crafting takes 3 to 7 business days. Delivery then takes 1 to 3 business days anywhere in Sri Lanka.",
       },
       {
         q: "Will the jewelry tarnish?",
@@ -53,7 +57,7 @@ const FAQS = [
       },
       {
         q: "How much is the delivery fee?",
-        a: "Our standard delivery fee is Rs. 350. We occasionally run free delivery promotions, which will be highlighted during checkout.",
+        a: "Our standard delivery fee is Rs. 450 per product. We occasionally run free delivery promotions, which will be highlighted during checkout.",
       },
       {
         q: "What is your return policy?",
@@ -64,8 +68,21 @@ const FAQS = [
 ];
 
 export default function FAQPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.flatMap((group) =>
+      group.questions.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      }))
+    ),
+  };
+
   return (
     <div className="bg-brand-cream min-h-screen pb-20 pt-12">
+      <JsonLd data={faqJsonLd} />
       <div className="container-main max-w-4xl">
         <SectionHeading 
           title="Frequently Asked Questions" 
@@ -74,18 +91,18 @@ export default function FAQPage() {
 
         <div className="space-y-12 mt-12">
           {FAQS.map((group, groupIdx) => (
-            <div key={groupIdx} className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-border/40">
-              <h2 className="text-2xl font-bold font-heading text-brand-purple mb-6 pb-2 border-b border-border/40">
+            <div key={groupIdx} className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-border">
+              <h2 className="text-2xl font-heading font-semibold text-brand-purple mb-6 pb-2 border-b border-border">
                 {group.category}
               </h2>
               
               <Accordion className="w-full">
                 {group.questions.map((faq, idx) => (
                   <AccordionItem key={idx} value={`item-${groupIdx}-${idx}`}>
-                    <AccordionTrigger className="text-left font-semibold text-foreground hover:text-brand-purple">
+                    <AccordionTrigger className="py-4 text-left text-[15px] font-semibold text-foreground hover:text-brand-purple hover:no-underline md:text-base">
                       {faq.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground leading-relaxed">
+                    <AccordionContent className="text-[15px] leading-relaxed text-muted-foreground">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -100,9 +117,9 @@ export default function FAQPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
           
           <div className="relative z-10">
-            <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
+            <h3 className="text-2xl text-white font-bold mb-4">Still have questions?</h3>
             <p className="text-white/80 mb-8 max-w-lg mx-auto">
-              Can't find the answer you're looking for? Our team is always happy to help you via WhatsApp.
+              Can&apos;t find the answer you&apos;re looking for? Our team is always happy to help you via WhatsApp.
             </p>
             <a
               href={generalInquiryLink()}
@@ -110,7 +127,7 @@ export default function FAQPage() {
               rel="noopener noreferrer"
               className="inline-flex h-12 items-center justify-center rounded-lg bg-[#25D366] px-8 text-sm font-medium text-white transition-all hover:bg-[#20BD5A]"
             >
-              <MessageCircle className="mr-2 h-5 w-5" />
+              <WhatsAppIcon className="mr-2 h-5 w-5" />
               Message us on WhatsApp
             </a>
           </div>

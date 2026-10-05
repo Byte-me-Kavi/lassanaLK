@@ -3,7 +3,7 @@ import { ProductForm } from "@/components/admin/product-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Edit Product | Lassana LK Admin",
+  title: "Edit Product",
 };
 
 export default async function EditProductPage(props: { params: Promise<{ id: string }> }) {
@@ -39,6 +39,7 @@ export default async function EditProductPage(props: { params: Promise<{ id: str
     slug: product.slug,
     price: product.price,
     compare_price: product.compare_price || undefined,
+    delivery_fee: product.delivery_fee ?? 450,
     description: product.description || undefined,
     short_description: product.short_description || undefined,
     category: typeof product.category === 'object' && product.category ? (product.category as any).id : product.category_id,

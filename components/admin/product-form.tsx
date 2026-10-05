@@ -39,6 +39,7 @@ const productSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   price: z.coerce.number().min(0, "Price must be positive"),
   compare_price: z.coerce.number().optional(),
+  delivery_fee: z.coerce.number().min(0).default(450),
   description: z.string().optional(),
   short_description: z.string().optional(),
   category: z.string().min(1, "Category is required"),
@@ -95,6 +96,7 @@ export function ProductForm({
       name: "",
       slug: "",
       price: 0,
+      delivery_fee: 450,
       stock_quantity: 0,
       is_featured: false,
       is_new: false,
@@ -151,6 +153,7 @@ export function ProductForm({
             slug: data.slug,
             price: data.price,
             compare_price: data.compare_price || null,
+            delivery_fee: data.delivery_fee,
             description: data.description || null,
             short_description: data.short_description || null,
             category_id: data.category,
@@ -174,6 +177,7 @@ export function ProductForm({
             slug: data.slug,
             price: data.price,
             compare_price: data.compare_price || null,
+            delivery_fee: data.delivery_fee,
             description: data.description || null,
             short_description: data.short_description || null,
             category_id: data.category,
@@ -314,6 +318,12 @@ export function ProductForm({
               <div className="space-y-2">
                 <Label htmlFor="compare_price">Compare-at Price (Rs.)</Label>
                 <Input id="compare_price" type="number" {...form.register("compare_price")} placeholder="Optional original price" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="delivery_fee">Delivery Fee (Rs.) *</Label>
+                <Input id="delivery_fee" type="number" {...form.register("delivery_fee")} />
+                {form.formState.errors.delivery_fee && <p className="text-sm text-red-500">{form.formState.errors.delivery_fee.message}</p>}
               </div>
 
               <div className="space-y-2">

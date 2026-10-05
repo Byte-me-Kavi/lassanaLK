@@ -24,6 +24,8 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-heading);
+  --font-display: var(--font-display);
+  --font-script: var(--font-script);
 
   /* shadcn semantic colors */
   --color-card: var(--card);
@@ -80,73 +82,87 @@
   --color-brand-gold-light: var(--brand-gold-light);
   --color-brand-ivory: var(--brand-ivory);
   --color-brand-cream: var(--brand-cream);
+  --color-brand-pearl: var(--brand-pearl);
+  --color-brand-gold-deep: var(--brand-gold-deep);
 }
 
 :root {
-  /* ─── Premium Modern Brand Palette ─────────────────────────────────────── */
-  --brand-purple: #30014F; /* Exact logo purple */
-  --brand-purple-deep: #200030;
+  /* ─── Brand palette (taken from the logo) ─────────────────────────────── */
+  --brand-purple: #30014F;       /* Amethyst ink — logo wordmark */
+  --brand-purple-deep: #200030;  /* Night plum — dark surfaces */
   --brand-purple-light: #501070;
-  --brand-gold: #B57F39; /* Exact logo gold */
+  --brand-gold: #B57F39;         /* Gilt — logo pendant */
+  --brand-gold-deep: #8A5A1F;    /* Gilt for small text on light (AA contrast) */
   --brand-gold-soft: #D49A4C;
-  --brand-gold-light: #EBB668;
+  --brand-gold-light: #EBB668;   /* Gold on dark surfaces */
   --brand-ivory: #FFFFFF;
-  --brand-cream: #EAE0F2; /* Richer, visible soft lilac/purple */
+  --brand-cream: #EAE0F2;        /* Lilac mist — soft surfaces */
+  --brand-pearl: #FBF9FC;        /* Page background, a breath of amethyst */
 
-  /* ─── Semantic Colors (mapped from brand) ──────────────── */
-  --background: #F8F9FA; /* Slightly cool off-white */
-  --foreground: #111827; /* Strong, highly readable dark gray */
+  /* ─── Semantic colors ─────────────────────────────────── */
+  --background: #FBF9FC;
+  --foreground: #22172B;
   --card: #FFFFFF;
-  --card-foreground: #111827;
+  --card-foreground: #22172B;
   --popover: #FFFFFF;
-  --popover-foreground: #111827;
+  --popover-foreground: #22172B;
 
-  /* Primary = Logo Purple */
   --primary: #30014F;
   --primary-foreground: #FFFFFF;
 
-  /* Secondary = Soft Lilac */
   --secondary: #EAE0F2;
   --secondary-foreground: #30014F;
 
-  /* Muted = Soft Gray */
-  --muted: #F1F3F5;
-  --muted-foreground: #495057;
+  --muted: #F3EEF6;
+  --muted-foreground: #5E5367;   /* ~7:1 on pearl — comfortable to read */
 
-  /* Accent = Gold */
-  --accent: #C88A25;
-  --accent-foreground: #FFFFFF;
+  /* Accent drives menu/select hover states — keep it soft lilac */
+  --accent: #F1EAF6;
+  --accent-foreground: #30014F;
 
-  /* Destructive */
-  --destructive: #DC2626;
+  --destructive: #C62828;
 
-  /* Borders & inputs */
-  --border: #E5E7EB;
-  --input: #E5E7EB;
+  --border: #E7DFEC;
+  --input: #DCD1E3;
   --ring: #30014F;
 
-  /* Chart colors (purple/gold spectrum) */
-  --chart-1: #2F014D;
-  --chart-2: #3B075F;
-  --chart-3: #C88A25;
-  --chart-4: #D9A441;
-  --chart-5: #756B72;
+  --chart-1: #30014F;
+  --chart-2: #501070;
+  --chart-3: #B57F39;
+  --chart-4: #D49A4C;
+  --chart-5: #8C7F95;
 
-  /* Radius */
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 
-  /* Sidebar (admin) */
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #111827;
+  --sidebar-foreground: #22172B;
   --sidebar-primary: #30014F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F3F4F6;
-  --sidebar-accent-foreground: #111827;
-  --sidebar-border: #E5E7EB;
+  --sidebar-accent: #F3EEF6;
+  --sidebar-accent-foreground: #30014F;
+  --sidebar-border: #E7DFEC;
   --sidebar-ring: #30014F;
 
-  /* ─── Custom Font Variables ──────────────────────────────── */
+  /* ─── Fonts ───────────────────────────────────────────
+     One clean sans for everything; Bodoni (font-display) is kept
+     only for the "Lassana LK" wordmark. */
   --font-heading: var(--font-sans);
+
+  /* ─── Motion ────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Polished gold, used only where something is meant to look like metal */
+  --gold-foil: linear-gradient(
+    100deg,
+    #8A5A1F 0%,
+    #D49A4C 22%,
+    #F6D59A 38%,
+    #B57F39 55%,
+    #EBB668 72%,
+    #8A5A1F 100%
+  );
 }
 
 /* No dark mode — this is a light-theme jewelry site */
@@ -157,44 +173,60 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
   }
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
 
-  /* ─── Typography Scale ───────────────────────────────────── */
+  /* ─── Typography scale (Hanken Grotesk, 1.25 ratio) ─── */
   h1, h2, h3, h4 {
     font-family: var(--font-heading);
-    color: var(--foreground); /* Professional dark text, not colored! */
+    color: var(--brand-purple);
+    text-wrap: balance;
   }
   h1 {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
   }
   h2 {
-    @apply text-2xl md:text-3xl font-bold tracking-tight;
+    @apply text-3xl md:text-4xl font-semibold;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
   h3 {
     @apply text-xl md:text-2xl font-semibold;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
   }
   h4 {
     @apply text-lg font-semibold;
+    line-height: 1.3;
+  }
+  p {
+    text-wrap: pretty;
   }
 }
 
 /* ─── Custom Utility Classes ─────────────────────────────── */
 @layer utilities {
-  /* Gold text accent */
   .text-gold {
-    color: var(--brand-gold);
+    color: var(--brand-gold-deep);
   }
   .text-gold-soft {
     color: var(--brand-gold-soft);
   }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
 
-  /* Section spacing */
   .section-padding {
     @apply py-16 md:py-20 lg:py-24;
   }
@@ -202,30 +234,176 @@
     @apply py-10 md:py-14 lg:py-16;
   }
 
-  /* Container */
   .container-main {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
-  /* Premium hover effect for cards */
+  /* Pressable feedback — the interface heard you */
+  .press {
+    transition-property: transform, background-color, color, border-color, box-shadow;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out);
+  }
+  .press:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  /* Kept for older markup; quieter than before */
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+    transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px -16px rgb(48 1 79 / 0.25);
+    }
   }
 
-  /* Gold gradient text */
-  .gradient-gold {
-    background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-soft) 50%, var(--brand-gold-light) 100%);
+  /* Metal finish for text */
+  .gradient-gold,
+  .gold-foil {
+    background-image: var(--gold-foil);
+    background-size: 220% 100%;
+    background-position: 0% 50%;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
-  /* Subtle gold underline */
   .underline-gold {
     text-decoration: underline;
     text-decoration-color: var(--brand-gold-soft);
     text-underline-offset: 4px;
     text-decoration-thickness: 2px;
+  }
+
+  /* Nav link with a gold rule that grows from the center */
+  .link-rule {
+    position: relative;
+  }
+  .link-rule::after {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.3rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--brand-gold);
+    transform: scaleX(0);
+    transition: transform 220ms var(--ease-out);
+  }
+  .link-rule[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-rule:hover::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* ─── Motion ─────────────────────────────────────────────── */
+
+/* A gold sheen that sweeps once across a .gold-foil element */
+@keyframes foil-sweep {
+  from { background-position: 100% 50%; }
+  to   { background-position: 0% 50%; }
+}
+.foil-sweep {
+  animation: foil-sweep 1.4s var(--ease-out) both;
+}
+
+/* Pendant settles on its chain */
+@keyframes pendant-drop {
+  0%   { opacity: 0; transform: translateY(-56px) rotate(-8deg); }
+  50%  { opacity: 1; transform: translateY(0) rotate(4deg); }
+  75%  { transform: translateY(0) rotate(-1.5deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-blur-in {
+  from { opacity: 0; filter: blur(6px); transform: translateY(4px); }
+  to   { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+/* Floating WhatsApp button: a ring that swells and fades */
+@keyframes wa-ping {
+  0%   { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes badge-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.animate-bump {
+  animation: badge-bump 360ms var(--ease-out);
+}
+
+@keyframes heart-pop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.animate-heart-pop {
+  animation: heart-pop 320ms var(--ease-out);
+}
+
+/* Product grid: re-staggers whenever filters change (the grid is keyed) */
+.grid-stagger > * {
+  animation: rise-in 420ms var(--ease-out) both;
+}
+.grid-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.grid-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.grid-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.grid-stagger > *:nth-child(5) { animation-delay: 160ms; }
+.grid-stagger > *:nth-child(6) { animation-delay: 200ms; }
+.grid-stagger > *:nth-child(7) { animation-delay: 240ms; }
+.grid-stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
+
+/* Entrance used sparingly for page intros */
+.rise-in {
+  animation: rise-in 520ms var(--ease-out) both;
+}
+
+/* Splash: hidden on repeat visits in the same session (set by an inline script) */
+html[data-splash="seen"] .home-splash {
+  display: none;
+}
+
+/* Chain halves reveal from the outer edge toward the name */
+@keyframes chain-reveal-left {
+  from { clip-path: inset(-12px 100% -12px -12px); }
+  to   { clip-path: inset(-12px -12px -12px -12px); }
+}
+@keyframes chain-reveal-right {
+  from { clip-path: inset(-12px -12px -12px 100%); }
+  to   { clip-path: inset(-12px -12px -12px -12px); }
+}
+
+/* Reduced motion: keep the end states, drop the movement */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .home-splash {
+    display: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -238,7 +416,7 @@
   background: var(--brand-cream);
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1B8E8;
+  background: #CDB6DD;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {

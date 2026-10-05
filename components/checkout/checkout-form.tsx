@@ -127,7 +127,10 @@ export function CheckoutForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-8 [&_[data-slot=input]]:h-12 [&_[data-slot=input]]:rounded-xl [&_[data-slot=input]]:bg-white [&_[data-slot=input]]:px-4 [&_[data-slot=input]]:text-base [&_[data-slot=select-trigger]]:h-12 [&_[data-slot=select-trigger]]:w-full [&_[data-slot=select-trigger]]:rounded-xl [&_[data-slot=select-trigger]]:bg-white [&_[data-slot=select-trigger]]:text-base [&_[data-slot=textarea]]:rounded-xl [&_[data-slot=textarea]]:bg-white [&_[data-slot=textarea]]:px-4 [&_[data-slot=textarea]]:text-base"
+    >
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -138,7 +141,7 @@ export function CheckoutForm() {
 
       {/* Customer Information */}
       <div className="space-y-6 pt-2">
-        <h3 className="font-heading text-2xl font-semibold border-b border-border/40 pb-4">
+        <h3 className="font-heading text-2xl font-semibold border-b border-border pb-4">
           Contact Details
         </h3>
         
@@ -146,32 +149,32 @@ export function CheckoutForm() {
           <div className="space-y-2">
             <Label htmlFor="customerName">Full Name *</Label>
             <Input id="customerName" {...register("customerName")} className={errors.customerName ? "border-red-500" : ""} />
-            {errors.customerName && <p className="text-xs text-red-500">{errors.customerName.message}</p>}
+            {errors.customerName && <p className="text-[13px] text-destructive">{errors.customerName.message}</p>}
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="customerPhone">Phone Number *</Label>
             <Input id="customerPhone" {...register("customerPhone")} placeholder="07XXXXXXXX" className={errors.customerPhone ? "border-red-500" : ""} />
-            {errors.customerPhone && <p className="text-xs text-red-500">{errors.customerPhone.message}</p>}
+            {errors.customerPhone && <p className="text-[13px] text-destructive">{errors.customerPhone.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="customerWhatsapp">WhatsApp Number (Optional)</Label>
             <Input id="customerWhatsapp" {...register("customerWhatsapp")} placeholder="Same as phone if left empty" />
-            {errors.customerWhatsapp && <p className="text-xs text-red-500">{errors.customerWhatsapp.message}</p>}
+            {errors.customerWhatsapp && <p className="text-[13px] text-destructive">{errors.customerWhatsapp.message}</p>}
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="customerEmail">Email (Optional)</Label>
             <Input id="customerEmail" type="email" {...register("customerEmail")} placeholder="For order receipts" />
-            {errors.customerEmail && <p className="text-xs text-red-500">{errors.customerEmail.message}</p>}
+            {errors.customerEmail && <p className="text-[13px] text-destructive">{errors.customerEmail.message}</p>}
           </div>
         </div>
       </div>
 
       {/* Delivery Information */}
       <div className="space-y-6 pt-6">
-        <h3 className="font-heading text-2xl font-semibold border-b border-border/40 pb-4">
+        <h3 className="font-heading text-2xl font-semibold border-b border-border pb-4">
           Delivery Address
         </h3>
         
@@ -179,7 +182,7 @@ export function CheckoutForm() {
           <div className="space-y-2">
             <Label htmlFor="address">Street Address *</Label>
             <Input id="address" {...register("address")} placeholder="House number and street name" className={errors.address ? "border-red-500" : ""} />
-            {errors.address && <p className="text-xs text-red-500">{errors.address.message}</p>}
+            {errors.address && <p className="text-[13px] text-destructive">{errors.address.message}</p>}
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -201,7 +204,7 @@ export function CheckoutForm() {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.district && <p className="text-xs text-red-500">{errors.district.message}</p>}
+              {errors.district && <p className="text-[13px] text-destructive">{errors.district.message}</p>}
             </div>
 
             <div className="space-y-2 relative" ref={citySuggestionsRef}>
@@ -221,7 +224,7 @@ export function CheckoutForm() {
                 placeholder={districtValue ? "Type to search..." : "Select District first"}
                 disabled={!districtValue}
               />
-              {errors.city && <p className="text-xs text-red-500">{errors.city.message}</p>}
+              {errors.city && <p className="text-[13px] text-destructive">{errors.city.message}</p>}
               
               {showCitySuggestions && filteredCities.length > 0 && (
                 <ul className="absolute z-50 w-full bg-white border border-slate-200 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-xl">
@@ -244,7 +247,7 @@ export function CheckoutForm() {
             <div className="space-y-2">
               <Label htmlFor="postalCode">Postal Code (Optional)</Label>
               <Input id="postalCode" {...register("postalCode")} />
-              {errors.postalCode && <p className="text-xs text-red-500">{errors.postalCode.message}</p>}
+              {errors.postalCode && <p className="text-[13px] text-destructive">{errors.postalCode.message}</p>}
             </div>
           </div>
         </div>
@@ -282,7 +285,7 @@ export function CheckoutForm() {
             </p>
           </div>
         </div>
-        {errors.codConfirmed && <p className="text-xs text-red-500 font-medium pl-8">{errors.codConfirmed.message}</p>}
+        {errors.codConfirmed && <p className="text-[13px] text-destructive font-medium pl-8">{errors.codConfirmed.message}</p>}
       </div>
 
       <div className="pt-6 pb-10">
@@ -290,9 +293,9 @@ export function CheckoutForm() {
           type="submit" 
           size="lg" 
           disabled={isSubmitting || items.length === 0}
-          className="w-full h-16 rounded-xl text-lg font-bold bg-brand-purple hover:bg-brand-purple-deep transition-all shadow-md"
+          className="press h-14 w-full rounded-full bg-brand-purple text-base font-semibold shadow-[0_14px_30px_-14px_rgba(48,1,79,0.7)] hover:bg-brand-purple-light"
         >
-          {isSubmitting ? "Processing Order..." : "Place COD Order"}
+          {isSubmitting ? "Placing your order…" : "Place order, pay on delivery"}
           {!isSubmitting && <Truck className="ml-2 h-5 w-5" />}
         </Button>
       </div>

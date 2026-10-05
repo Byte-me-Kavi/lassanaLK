@@ -39,9 +39,10 @@ export async function POST(req: Request) {
     
     // 1. Fetch product prices from DB
     const productIds = validatedData.items.map(i => i.productId);
-    const { data: products } = await supabase.from("products").select("id, price, name, stock_quantity").in("id", productIds);
+    const { data: products } = await supabase.from("products").select("id, price, name, stock_quantity, delivery_fee").in("id", productIds);
     
     let calculatedSubtotal = 0;
+    let deliveryFee = 0;
     
     // Check stock and calculate total
     for (const item of validatedData.items) {
@@ -51,9 +52,10 @@ export async function POST(req: Request) {
         throw new Error(`Insufficient stock for ${dbProduct.name}`);
       }
       calculatedSubtotal += (dbProduct.price * item.quantity);
+      // Delivery fee is added per unit or per product, standard is per unit
+      deliveryFee += (dbProduct.delivery_fee ?? 450) * item.quantity;
     }
     
-    const deliveryFee = 350; // Hardcoded or fetch from site_settings
     const total = calculatedSubtotal + deliveryFee;
 
     // 2. Insert Order

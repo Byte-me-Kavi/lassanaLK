@@ -1,12 +1,30 @@
-import type { Metadata } from "next";
-import { Outfit, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { SEO_COPY, SITE_URL } from "@/lib/seo";
+import { Bodoni_Moda, Hanken_Grotesk, Great_Vibes, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// Body font — rounded, clean, modern, highly readable
-const outfit = Outfit({
+// Display font — high-contrast serif that echoes the Lassana wordmark
+const bodoni = Bodoni_Moda({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["opsz"],
+  display: "swap",
+});
+
+// Body font — open, highly readable grotesque
+const hanken = Hanken_Grotesk({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
+});
+
+// Script font — only used to preview engraved names in gold
+const greatVibes = Great_Vibes({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  preload: false,
 });
 
 // Mono font — for admin code/data display
@@ -16,50 +34,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Lassana LK | Personalized Jewelry & Elegant Designs in Sri Lanka",
+    default: SEO_COPY.defaultTitle,
     template: "%s | Lassana LK",
   },
-  description:
-    "Discover elegant jewelry and personalized name pendants from Lassana LK. Shop beautiful designs with convenient Cash on Delivery ordering in Sri Lanka.",
-  keywords: [
-    "jewelry",
-    "Sri Lanka",
-    "personalized jewelry",
-    "name pendants",
-    "custom jewelry",
-    "Lassana LK",
-    "gold jewelry",
-    "silver jewelry",
-    "COD",
-    "cash on delivery",
-  ],
+  description: SEO_COPY.description,
+  applicationName: "Lassana LK",
+  keywords: SEO_COPY.keywords,
   authors: [{ name: "Lassana LK" }],
   creator: "Lassana LK",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-  ),
+  publisher: "Lassana LK",
+  category: "shopping",
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: false },
   openGraph: {
     type: "website",
     locale: "en_LK",
     siteName: "Lassana LK",
-    title: "Lassana LK | Personalized Jewelry & Elegant Designs in Sri Lanka",
-    description:
-      "Discover elegant jewelry and personalized name pendants from Lassana LK. Shop beautiful designs with convenient Cash on Delivery ordering in Sri Lanka.",
-    images: [
-      {
-        url: "/logo/full logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Lassana LK — Personalized Jewelry",
-      },
-    ],
+    url: "/",
+    title: SEO_COPY.defaultTitle,
+    description: SEO_COPY.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lassana LK | Personalized Jewelry",
-    description:
-      "Discover elegant jewelry and personalized name pendants from Lassana LK.",
+    title: SEO_COPY.defaultTitle,
+    description: SEO_COPY.description,
   },
   robots: {
     index: true,
@@ -67,8 +67,16 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#200030",
+  width: "device-width",
+  initialScale: 1,
 };
 
 import { Toaster } from "@/components/ui/toast";
@@ -76,9 +84,18 @@ import { Toaster } from "@/components/ui/toast";
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      className={`${outfit.variable} ${geistMono.variable} h-full antialiased`}
+      lang="en-LK"
+      className={`${bodoni.variable} ${hanken.variable} ${greatVibes.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Hide the home intro before first paint if it already played this session */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("llk-splash-seen")==="1")document.documentElement.dataset.splash="seen"}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         {children}
         <Toaster />

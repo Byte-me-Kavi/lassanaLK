@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Heart, ShoppingBag, PenTool } from "lucide-react";
+import { Heart, ShoppingBag, PenLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/lib/types";
 import { PriceDisplay } from "@/components/ui/price-display";
@@ -23,20 +23,23 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const isInWishlist = useWishlistStore((s) => s.isInWishlist(product.id));
   const addItem = useCartStore((s) => s.addItem);
 
-  const primaryImage = product.images?.find((img) => img.is_primary)?.url || product.images?.[0]?.url || "";
+  const primary = product.images?.find((img) => img.is_primary) || product.images?.[0];
+  const primaryImage = primary?.url || "";
+  // A second photo, shown on hover so shoppers can see the piece from another angle
+  const secondaryImage = product.images?.find((img) => img.url && img.url !== primaryImage)?.url;
   const isOutOfStock = product.stock_quantity <= 0;
   const isWishlisted = mounted && isInWishlist;
+  const materialName = typeof product.material === "string" ? product.material : product.material?.name;
+  const href = `/products/${product.slug}`;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleAddToCart = () => {
     if (isOutOfStock) return;
-    
     addItem({
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
       price: product.price,
+      delivery_fee: product.delivery_fee ?? 450,
       quantity: 1,
       imageUrl: primaryImage,
       isCustomizable: product.is_customizable,
@@ -44,9 +47,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     });
   };
 
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleWishlist = () => {
     toggleWishlist({
       productId: product.id,
       productName: product.name,
@@ -56,117 +57,131 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     });
   };
 
-  return (
-    <div className={cn("group flex flex-col rounded-2xl bg-white p-3 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-border/60 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 card-hover", className)}>
-      {/* Image Container */}
-      <Link href={`/products/${product.slug}`} className="relative aspect-square overflow-hidden rounded-xl bg-gray-50/50 mb-4 block">
-        {/* Badges */}
-        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
-          {product.is_new && (
-            <span className="inline-flex items-center rounded-full bg-brand-purple px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-              New
-            </span>
-          )}
-          {product.is_best_seller && (
-            <span className="inline-flex items-center rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-              Best Seller
-            </span>
-          )}
-          {isOutOfStock && (
-            <span className="inline-flex items-center rounded-full bg-muted/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground shadow-sm">
-              Out of Stock
-            </span>
-          )}
-        </div>
+  const actionClass =
+    "press flex h-10 w-full items-center justify-center gap-2 rounded-full bg-brand-cream/80 text-sm font-semibold text-brand-purple hover:bg-brand-purple hover:text-white disabled:opacity-50 disabled:hover:bg-brand-cream/80 disabled:hover:text-brand-purple sm:h-11";
 
-        {/* Wishlist Button */}
+  return (
+    <article
+      className={cn(
+        "group flex flex-col rounded-2xl border border-border bg-white p-2 shadow-[0_1px_2px_rgba(48,1,79,0.04)] transition-[border-color,box-shadow,transform] duration-300 ease-out sm:p-2.5",
+        "[@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:border-brand-purple/30 [@media(hover:hover)]:hover:shadow-[0_18px_40px_-22px_rgba(48,1,79,0.45)]",
+        className
+      )}
+    >
+      <div className="relative">
+        <Link
+          href={href}
+          className="relative block aspect-square overflow-hidden rounded-xl bg-brand-cream/50"
+          aria-label={product.name}
+        >
+          {primaryImage ? (
+            <>
+              <Image
+                src={primaryImage}
+                alt={product.name}
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                className="object-cover transition-transform duration-700 ease-out [@media(hover:hover)]:group-hover:scale-[1.04]"
+                priority={priority}
+              />
+              {secondaryImage && (
+                <Image
+                  src={secondaryImage}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  className="object-cover opacity-0 transition-opacity duration-500 ease-out [@media(hover:hover)]:group-hover:opacity-100"
+                />
+              )}
+            </>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <ShoppingBag className="h-10 w-10 text-brand-purple/20" />
+            </div>
+          )}
+
+          {/* Status */}
+          <div className="absolute left-2.5 top-2.5 flex flex-col items-start gap-1.5">
+            {product.is_new && (
+              <span className="rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-brand-purple shadow-sm">
+                New
+              </span>
+            )}
+            {product.is_best_seller && (
+              <span className="rounded-full bg-brand-purple px-2.5 py-1 text-xs font-semibold text-brand-gold-light shadow-sm">
+                Best seller
+              </span>
+            )}
+            {isOutOfStock && (
+              <span className="rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm">
+                Sold out
+              </span>
+            )}
+          </div>
+        </Link>
+
         <button
           type="button"
           onClick={handleWishlist}
           className={cn(
-            "absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-all hover:scale-110",
-            isWishlisted ? "text-red-500 hover:text-red-600" : "text-muted-foreground hover:text-foreground"
+            "press absolute right-2.5 top-2.5 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur-sm",
+            isWishlisted ? "text-brand-purple" : "text-foreground/60 hover:text-brand-purple"
           )}
-          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Save ${product.name} to wishlist`}
+          aria-pressed={isWishlisted}
         >
-          <Heart className={cn("h-4 w-4 transition-all", isWishlisted && "fill-current scale-110")} />
-        </button>
-
-        {/* Product Image */}
-        {primaryImage ? (
-          <Image
-            src={primaryImage}
-            alt={product.name}
-            fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            priority={priority}
+          <Heart
+            key={isWishlisted ? "on" : "off"}
+            className={cn("h-4.5 w-4.5", isWishlisted && "animate-heart-pop fill-current")}
           />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
-            <ShoppingBag className="h-10 w-10 text-muted-foreground/30" />
-          </div>
-        )}
-      </Link>
+        </button>
+      </div>
 
-      {/* Product Details */}
-      <div className="flex flex-col flex-1 pt-1">
-
-        <Link href={`/products/${product.slug}`} className="block group-hover:text-brand-purple transition-colors">
-          <h3 className="font-semibold text-foreground text-base md:text-lg line-clamp-2 mb-1">
+      <div className="flex flex-1 flex-col px-1.5 pb-1 pt-3 sm:px-2">
+        <Link href={href} className="block">
+          <h3 className="text-[15px] font-semibold leading-snug tracking-normal text-foreground transition-colors line-clamp-2 group-hover:text-brand-purple md:text-base">
             {product.name}
           </h3>
         </Link>
-        
-        {(product.review_count ?? 0) > 0 && (
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <StarRating rating={product.average_rating ?? 0} size="sm" />
-            <span className="text-[10px] text-muted-foreground font-medium">({product.review_count})</span>
-          </div>
-        )}
-        
-        {product.material && (
-          <div className="mb-1.5">
-            <span className="inline-block bg-brand-cream/30 text-brand-purple text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
-              {typeof product.material === 'string' ? product.material : product.material?.name}
-            </span>
-          </div>
-        )}
-        
-        <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1 font-medium">
-          {product.short_description || "\u00A0"}
-        </p>
 
-        <div className="flex flex-col gap-3 mt-auto">
-          <PriceDisplay 
-            price={product.price} 
-            comparePrice={product.compare_price} 
-            size="lg" 
+        {materialName && (
+          <p className="mt-1 text-[13px] font-medium text-brand-gold-deep">{materialName}</p>
+        )}
+
+        {(product.review_count ?? 0) > 0 && (
+          <div className="mt-1.5 flex items-center gap-1.5">
+            <StarRating rating={product.average_rating ?? 0} size="sm" />
+            <span className="text-xs text-muted-foreground">({product.review_count})</span>
+          </div>
+        )}
+
+        <div className="mt-auto pt-3">
+          <PriceDisplay
+            price={product.price}
+            comparePrice={product.compare_price}
+            size="lg"
+            className="mb-3 border-t border-border pt-3"
           />
-          
+
           {product.is_customizable ? (
-            <Link
-              href={`/products/${product.slug}`}
-              className="flex w-full h-10 items-center justify-center rounded-lg bg-brand-cream text-brand-purple text-sm font-medium transition-colors hover:bg-brand-purple hover:text-white"
-              aria-label={`Customize ${product.name}`}
-            >
-              <PenTool className="mr-2 h-4 w-4" />
-              Customize
+            <Link href={href} className={actionClass} aria-label={`Personalize ${product.name}`}>
+              <PenLine className="h-4 w-4" />
+              Personalize
             </Link>
           ) : (
             <button
               type="button"
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className="flex w-full h-10 items-center justify-center rounded-lg bg-brand-cream text-brand-purple text-sm font-medium transition-colors hover:bg-brand-purple hover:text-white disabled:opacity-50 disabled:hover:bg-brand-cream disabled:hover:text-brand-purple"
+              className={actionClass}
               aria-label={`Add ${product.name} to cart`}
             >
-              <ShoppingBag className="mr-2 h-4 w-4" />
-              Add to Cart
+              <ShoppingBag className="h-4 w-4" />
+              {isOutOfStock ? "Sold out" : "Add to cart"}
             </button>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

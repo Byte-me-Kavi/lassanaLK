@@ -1,15 +1,19 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import { HomeSplash } from "@/components/home/home-splash";
-import { ProductFilters } from "@/components/product/product-filters";
-import { FilterDrawer } from "@/components/product/filter-drawer";
+import { NameHero } from "@/components/home/name-hero";
+import { ActiveFilters, MobileFilterButton, ProductFilters } from "@/components/product/product-filters";
 import { ProductSort } from "@/components/product/product-sort";
 import { ProductCard } from "@/components/product/product-card";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Product } from "@/lib/types";
 
-export const metadata = {
-  title: "Home | Lassana LK",
-  description: "Browse our beautiful collection of personalized jewelry, name necklaces, and elegant pieces.",
+export const metadata: Metadata = {
+  title: { absolute: "Lassana LK | Personalized Name Pendants & Jewelry in Sri Lanka" },
+  description:
+    "Shop personalized name pendants, custom jewelry and laser-cut 2D metal signs from Lassana LK. Made to order in 3–7 business days and delivered anywhere in Sri Lanka with cash on delivery.",
+  alternates: { canonical: "/" },
 };
 
 export const revalidate = 3600;
@@ -21,12 +25,13 @@ export default async function HomePage(props: {
   const categoryParam = searchParams.category as string;
   const materialParam = searchParams.material as string;
   const sortParam = searchParams.sort as string;
+  const personalizedOnly = searchParams.personalized === "1";
 
   const supabase = createAdminClient();
   let query = supabase
     .from("products")
     .select(`
-      id, name, slug, price, compare_price, short_description, stock_quantity, 
+      id, name, slug, price, compare_price, delivery_fee, short_description, stock_quantity, 
       is_customizable, is_best_seller, is_new, category_id, material_id, created_at, updated_at, is_active,
       images:product_images(id, product_id, url, is_primary),
       categories${categoryParam ? '!inner' : ''}(name, slug),
@@ -41,6 +46,10 @@ export default async function HomePage(props: {
 
   if (materialParam) {
     query = query.in("materials.slug", materialParam.split(","));
+  }
+
+  if (personalizedOnly) {
+    query = query.eq("is_customizable", true);
   }
 
   // Sorting
@@ -69,6 +78,7 @@ export default async function HomePage(props: {
     slug: p.slug,
     price: p.price,
     compare_price: p.compare_price,
+    delivery_fee: p.delivery_fee,
     short_description: p.short_description,
     stock_quantity: p.stock_quantity,
     is_customizable: p.is_customizable,
@@ -95,61 +105,78 @@ export default async function HomePage(props: {
 
   let products = parsedProducts;
 
+  // Re-keying the grid replays its stagger, so a filter change visibly lands
+  const gridKey = [categoryParam, materialParam, sortParam, personalizedOnly].join("|");
+  const hasFilters = Boolean(categoryParam || materialParam || personalizedOnly);
+
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-24">
       <HomeSplash />
-      
-      <div className="container-main pt-12">
-        <div className="flex flex-col lg:flex-row gap-8 items-start relative">
-          
-          {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0 sticky top-24 self-start z-10">
-            <div className="bg-brand-cream p-6 rounded-2xl border border-brand-purple/10">
-              <h2 className="font-heading text-xl font-bold text-brand-purple mb-6 pb-2 border-b border-brand-purple/10">
-                Categories & Filters
-              </h2>
-              <Suspense fallback={<div>Loading filters...</div>}>
-                <ProductFilters materials={materials} categories={categories} />
-              </Suspense>
-            </div>
+      <NameHero />
+
+      <section id="shop" className="container-main scroll-mt-24 pt-14 md:pt-20" aria-labelledby="shop-heading">
+        {/* Section heading + toolbar */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 id="shop-heading">The collection</h2>
+            <p className="mt-2 text-muted-foreground" aria-live="polite">
+              {products.length === 1 ? "1 piece" : `${products.length} pieces`}
+              {hasFilters ? " match your filters" : ", ready to order"}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Suspense fallback={<div className="h-11 w-24 lg:hidden" />}>
+              <MobileFilterButton materials={materials} categories={categories} resultCount={products.length} />
+            </Suspense>
+            <Suspense fallback={<div className="h-11 w-48" />}>
+              <ProductSort />
+            </Suspense>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-10 border-t border-border pt-8">
+          {/* Desktop sidebar: short enough to read in one glance */}
+          <aside
+            aria-label="Filters"
+            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] w-56 shrink-0 overflow-y-auto pr-1 scrollbar-none lg:block"
+          >
+            <Suspense fallback={<div className="h-96" />}>
+              <ProductFilters materials={materials} categories={categories} />
+            </Suspense>
           </aside>
 
-          {/* Main Content */}
-          <main className="flex-1">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/40">
-              <p className="text-sm text-muted-foreground font-medium">
-                Showing {products.length} products
-              </p>
-              
-              <div className="flex items-center gap-3">
-                <Suspense fallback={<div className="w-10" />}>
-                  <FilterDrawer materials={materials} categories={categories} />
-                </Suspense>
-                
-                <Suspense fallback={<div className="w-32" />}>
-                  <ProductSort />
-                </Suspense>
-              </div>
-            </div>
-
-            {/* Product Grid */}
+          {/* Product grid */}
+          <div className="min-w-0 flex-1">
+            <Suspense fallback={null}>
+              <ActiveFilters materials={materials} categories={categories} />
+            </Suspense>
             {products.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 animate-in fade-in duration-1000 delay-300 fill-mode-both">
+              <div
+                key={gridKey}
+                className="grid-stagger grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-5"
+              >
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-2xl border border-border/40">
-                <h3 className="font-heading text-2xl font-bold text-brand-purple mb-2">No products found</h3>
-                <p className="text-muted-foreground">Try adjusting your filters to find what you're looking for.</p>
+              <div className="rounded-2xl border border-dashed border-brand-purple/20 bg-white px-6 py-20 text-center">
+                <h3>No pieces match these filters</h3>
+                <p className="mx-auto mt-2 max-w-sm text-muted-foreground">
+                  Try removing a category or material to see more of the collection.
+                </p>
+                <Link
+                  href="/#shop"
+                  className="press mt-6 inline-flex h-11 items-center rounded-full bg-brand-purple px-6 text-sm font-semibold text-white hover:bg-brand-purple-light"
+                >
+                  Clear filters
+                </Link>
               </div>
             )}
-          </main>
-
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

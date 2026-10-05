@@ -2,7 +2,7 @@ import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AdminHeader } from "@/components/admin/admin-header";
 
 export const metadata = {
-  title: "Admin Dashboard | Lassana LK",
+  title: "Admin Dashboard",
   description: "Store management dashboard for Lassana LK.",
 };
 

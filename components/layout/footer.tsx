@@ -1,165 +1,102 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { FOOTER_LINKS, SOCIAL_LINKS, SITE_CONFIG } from "@/lib/constants";
+
+const LINK_GROUPS = [
+  { title: "Shop", links: FOOTER_LINKS.shop },
+  { title: "Help", links: FOOTER_LINKS.help },
+  { title: "Company", links: FOOTER_LINKS.company },
+];
+
+const socialClass =
+  "press flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 hover:border-brand-gold-light hover:text-brand-gold-light";
 
 /**
  * Site-wide footer with shop links, help, company info, and social links.
  */
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-border/40">
-      <div className="container-main section-padding-sm">
-        {/* Top Section */}
-        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-10 lg:gap-8">
+    <footer className="relative overflow-hidden bg-brand-purple-deep text-white">
+      {/* Thin gold edge, like the rim of a setting */}
+      <div aria-hidden className="h-px bg-linear-to-r from-transparent via-brand-gold/70 to-transparent" />
+
+      <div className="container-main pb-8 pt-14 md:pt-16">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
           {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-4">
+          <div>
+            <Link href="/" className="inline-flex items-center gap-3" aria-label="Lassana LK home">
               <Image
-                src="/logo/full logo.png"
-                alt="Lassana LK"
-                width={120}
-                height={42}
-                className="h-10 w-auto"
+                src="/logo/only logo.png"
+                alt=""
+                width={30}
+                height={52}
+                className="h-14 w-auto"
                 style={{ width: "auto" }}
               />
+              <span className="font-display text-3xl text-white">
+                Lassana <span className="text-brand-gold-light">LK</span>
+              </span>
             </Link>
-            <p className="text-sm text-brand-purple/70 max-w-xs leading-relaxed">
-              {SITE_CONFIG.tagline}
+            <p className="mt-4 max-w-xs text-[15px] leading-relaxed text-white/70">
+              {SITE_CONFIG.tagline} Personalized pieces, delivered anywhere in Sri Lanka with cash on delivery.
             </p>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 mt-5">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
-                href={SOCIAL_LINKS.instagram}
+                href={SOCIAL_LINKS.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
-                aria-label="Follow us on Instagram"
+                className="press inline-flex h-10 items-center gap-2 rounded-full bg-[#25D366] px-4 text-sm font-semibold text-white hover:bg-[#1FB957]"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                </svg>
+                <WhatsAppIcon className="h-4 w-4" />
+                Chat on WhatsApp
               </a>
               <a
                 href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
+                className={socialClass}
                 aria-label="Follow us on Facebook"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
               </a>
-              <a
-                href={SOCIAL_LINKS.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-cream text-brand-purple hover:bg-brand-purple hover:text-white transition-colors"
-                aria-label="Contact us on WhatsApp"
-              >
-                <MessageCircle className="h-4 w-4" />
-              </a>
             </div>
           </div>
 
-          {/* Shop Links */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 lg:col-span-3">
-            <div>
-            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
-              Shop
-            </h4>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.shop.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Help Links */}
-          <div>
-            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
-              Help
-            </h4>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.help.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h4 className="text-sm font-bold text-brand-purple mb-4 uppercase tracking-wider">
-              Company
-            </h4>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-brand-purple/70 hover:text-brand-purple transition-colors font-medium"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Links */}
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
+            {LINK_GROUPS.map((group) => (
+              <div key={group.title}>
+                <p className="font-heading font-semibold text-lg text-brand-gold-light">{group.title}</p>
+                <ul className="mt-3 space-y-0.5">
+                  {group.links.map((link) => (
+                    <li key={`${group.title}-${link.href}-${link.label}`}>
+                      <Link
+                        href={link.href}
+                        className="inline-block py-1.5 text-[15px] text-white/75 transition-colors hover:text-white"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-border/60">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-brand-purple/60 font-medium">
-              © {new Date().getFullYear()} Lassana LK. All rights reserved.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-brand-purple/60 font-medium">
-              <Link href="/privacy" className="hover:text-brand-purple transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-brand-purple transition-colors">
-                Terms & Conditions
-              </Link>
-            </div>
+        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-[13px] text-white/55 sm:flex-row sm:items-center">
+          <p>© {new Date().getFullYear()} Lassana LK. All rights reserved.</p>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy" className="py-2 transition-colors hover:text-white">
+              Privacy policy
+            </Link>
+            <Link href="/terms" className="py-2 transition-colors hover:text-white">
+              Terms and conditions
+            </Link>
           </div>
         </div>
       </div>

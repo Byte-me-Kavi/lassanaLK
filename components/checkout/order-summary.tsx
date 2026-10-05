@@ -8,13 +8,13 @@ import { Separator } from "@/components/ui/separator";
 export function OrderSummary() {
   const { items, getSubtotal } = useCartStore();
   const subtotal = getSubtotal();
-  const deliveryFee = 350; // hardcoded for now, from constants
+  const deliveryFee = items.reduce((acc, item) => acc + ((item.delivery_fee ?? 450) * item.quantity), 0);
   const total = subtotal + deliveryFee;
 
   if (items.length === 0) {
     return (
       <div className="py-4">
-        <h3 className="font-heading text-2xl font-bold text-brand-purple mb-4">Order Summary</h3>
+        <h3 className="font-heading text-2xl font-semibold text-brand-purple mb-4">Order Summary</h3>
         <p className="text-muted-foreground text-sm">Your cart is empty.</p>
       </div>
     );
@@ -22,12 +22,12 @@ export function OrderSummary() {
 
   return (
     <div className="flex flex-col">
-      <h3 className="font-heading text-2xl font-bold text-brand-purple mb-6 pb-4 border-b border-brand-purple/10">Order Summary</h3>
+      <h3 className="font-heading text-2xl font-semibold text-brand-purple mb-6 pb-4 border-b border-brand-purple/10">Order Summary</h3>
       
       <div className="space-y-4 mb-6 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
           <div key={item.cartId} className="flex gap-4">
-            <div className="relative h-16 w-16 shrink-0 rounded-lg bg-brand-cream overflow-hidden border border-border/40">
+            <div className="relative h-16 w-16 shrink-0 rounded-lg bg-brand-cream overflow-hidden border border-border">
               {item.imageUrl ? (
                 <Image src={item.imageUrl} alt={item.productName} fill sizes="64px" className="object-cover" />
               ) : null}

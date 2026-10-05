@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProductGalleryProps {
@@ -12,44 +13,64 @@ interface ProductGalleryProps {
 export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Fallback to placeholder if no images
-  const displayImages = images.length > 0 ? images : [{ id: "fallback", url: "/placeholder.jpg", isPrimary: true }];
+  const displayImages = images.length > 0 ? images : [{ id: "fallback", url: "/placeholder.jpg", is_primary: true }];
+  const hasMany = displayImages.length > 1;
+
+  const select = (idx: number) => {
+    setActiveIndex((idx + displayImages.length) % displayImages.length);
+  };
+
+  const arrowClass =
+    "press absolute top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-brand-purple shadow-sm backdrop-blur-sm hover:bg-white";
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Main Image */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-white/40 backdrop-blur-md border border-border/40 aspect-4/3 md:aspect-square max-h-[45vh] md:max-h-none">
-        <Image
-          src={displayImages[activeIndex].url}
-          alt={`${productName} - Image ${activeIndex + 1}`}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-500 hover:scale-105 cursor-zoom-in"
-        />
+    <div className="mx-auto flex w-full max-w-md flex-col gap-3 md:max-w-none">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border bg-white md:aspect-square">
+        {displayImages.map((image, idx) => (
+          <Image
+            key={image.id}
+            src={image.url}
+            alt={idx === activeIndex ? `${productName}, photo ${idx + 1} of ${displayImages.length}` : ""}
+            fill
+            priority={idx === 0}
+            sizes="(max-width: 768px) 90vw, 40vw"
+            className={cn(
+              "object-cover transition-opacity duration-400 ease-out",
+              idx === activeIndex ? "opacity-100" : "opacity-0"
+            )}
+          />
+        ))}
+
+        {hasMany && (
+          <>
+            <button type="button" onClick={() => select(activeIndex - 1)} aria-label="Previous photo" className={cn(arrowClass, "left-3")}>
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button type="button" onClick={() => select(activeIndex + 1)} aria-label="Next photo" className={cn(arrowClass, "right-3")}>
+              <ChevronRight className="h-5 w-5" />
+            </button>
+            <span className="tabular absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-purple shadow-sm backdrop-blur-sm">
+              {activeIndex + 1} / {displayImages.length}
+            </span>
+          </>
+        )}
       </div>
 
-      {/* Thumbnails */}
-      {displayImages.length > 1 && (
-        <div className="grid grid-cols-5 gap-3">
+      {hasMany && (
+        <div className="flex gap-2.5 overflow-x-auto p-0.5 scrollbar-none" role="group" aria-label="Product photos">
           {displayImages.map((image, idx) => (
             <button
               key={image.id}
-              onClick={() => setActiveIndex(idx)}
+              type="button"
+              onClick={() => select(idx)}
+              aria-label={`Show photo ${idx + 1}`}
+              aria-pressed={activeIndex === idx}
               className={cn(
-                "relative aspect-square overflow-hidden rounded-lg bg-white/40 backdrop-blur-md border-2 transition-all",
-                activeIndex === idx
-                  ? "border-brand-purple shadow-sm opacity-100"
-                  : "border-border/40 opacity-70 hover:opacity-100 hover:border-border"
+                "press relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg bg-white ring-offset-2 ring-offset-background",
+                activeIndex === idx ? "ring-2 ring-brand-purple" : "opacity-70 ring-1 ring-border hover:opacity-100"
               )}
             >
-              <Image
-                src={image.url}
-                alt={`Thumbnail ${idx + 1}`}
-                fill
-                sizes="20vw"
-                className="object-cover"
-              />
+              <Image src={image.url} alt="" fill sizes="64px" className="object-cover" />
             </button>
           ))}
         </div>

@@ -9,7 +9,7 @@ export default function OrderConfirmedPage({
 }) {
   return (
     <div className="bg-brand-cream min-h-screen flex items-center justify-center py-20 px-4">
-      <div className="max-w-xl w-full bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl border border-border/40 relative overflow-hidden">
+      <div className="max-w-xl w-full bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl border border-border relative overflow-hidden">
         {/* Decorative background circle */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-50 rounded-full -z-10" />
 
@@ -19,7 +19,7 @@ export default function OrderConfirmedPage({
           </div>
         </div>
 
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-brand-purple mb-4">
+        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-brand-purple mb-4">
           Order Confirmed!
         </h1>
         
@@ -27,7 +27,7 @@ export default function OrderConfirmedPage({
           Thank you for your purchase. Your order has been received and is now being processed.
         </p>
 
-        <div className="bg-brand-ivory rounded-xl p-6 mb-8 text-left border border-border/40">
+        <div className="bg-brand-ivory rounded-xl p-6 mb-8 text-left border border-border">
           <p className="text-sm text-muted-foreground mb-1">Order Number</p>
           <p className="text-xl font-mono font-bold text-foreground tracking-wider mb-4">
             {params.orderNumber}
@@ -39,7 +39,7 @@ export default function OrderConfirmedPage({
           <ul className="text-sm text-muted-foreground space-y-2">
             <li>1. Our team will review your order and customization details.</li>
             <li>2. We will contact you via WhatsApp to confirm the final design.</li>
-            <li>3. Your order will be crafted and shipped within 7-10 days.</li>
+            <li>3. Your order will be made within 3–7 business days, then delivered in 1–3 business days.</li>
             <li>4. You will pay the courier in cash upon delivery.</li>
           </ul>
         </div>

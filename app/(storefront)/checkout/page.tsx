@@ -1,22 +1,24 @@
+import type { Metadata } from "next";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
 import { OrderSummary } from "@/components/checkout/order-summary";
 import { ShieldCheck, Truck } from "lucide-react";
 
-export const metadata = {
-  title: "Checkout | Lassana LK",
-  description: "Complete your order securely with Cash on Delivery.",
+export const metadata: Metadata = {
+  title: "Checkout",
+  description: "Complete your Lassana LK order and pay cash on delivery.",
+  robots: { index: false, follow: false },
 };
 
 export default function CheckoutPage() {
   return (
-    <div className="bg-brand-ivory min-h-screen pb-20 pt-8">
+    <div className="min-h-screen pb-20 pt-8">
       <div className="container-main max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
           
           {/* Main Form Area (Left) */}
           <div className="w-full lg:w-[55%] order-2 lg:order-1 pt-4 lg:pt-8">
             <div className="mb-10">
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-brand-purple mb-3">
+              <h1 className="text-3xl md:text-4xl font-heading font-semibold text-brand-purple mb-3">
                 Checkout
               </h1>
               <p className="text-muted-foreground flex items-center gap-2">
@@ -37,7 +39,7 @@ export default function CheckoutPage() {
               <div>
                 <h4 className="font-semibold text-sm mb-1">Islandwide Delivery</h4>
                 <p className="text-xs opacity-80 leading-relaxed">
-                  Your order will be crafted and delivered within 7-10 business days. We will contact you via WhatsApp to confirm the final delivery date.
+                  Your order is made in 3–7 business days, then delivered within 1–3 business days. We will contact you on WhatsApp to confirm the delivery date.
                 </p>
               </div>
             </div>

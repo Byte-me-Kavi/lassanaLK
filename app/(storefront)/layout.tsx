@@ -2,6 +2,8 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { JsonLd } from "@/components/seo/json-ld";
+import { storeJsonLd } from "@/lib/seo";
 
 /**
  * Storefront layout — wraps all customer-facing pages.
@@ -14,6 +16,7 @@ export default function StorefrontLayout({
 }) {
   return (
     <>
+      <JsonLd data={storeJsonLd()} />
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />

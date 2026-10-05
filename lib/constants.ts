@@ -11,8 +11,9 @@ export const SITE_CONFIG = {
   tagline: "Beautiful jewelry, made personal.",
   description:
     "Discover elegant jewelry and personalized name pendants from Lassana LK. Shop beautiful designs with convenient Cash on Delivery ordering in Sri Lanka.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "94774671009",
+  // Set NEXT_PUBLIC_SITE_URL to the live domain in production
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://lassanalk.lk",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "94755040704",
   currency: "LKR",
   currencySymbol: "Rs.",
   defaultDeliveryFee: 350,
@@ -86,8 +87,8 @@ export const SRI_LANKAN_DISTRICTS = [
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/shop/collections", label: "Collections" },
-  { href: "/shop/personalized-jewelry", label: "Customize" },
+  { href: "/#shop", label: "Collections" },
+  { href: "/?personalized=1#shop", label: "Customize" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -97,10 +98,9 @@ export const NAV_LINKS = [
  */
 export const FOOTER_LINKS = {
   shop: [
-    { href: "/", label: "All Products" },
-    { href: "/shop/new-arrivals", label: "New Arrivals" },
-    { href: "/shop/personalized-jewelry", label: "Personalized Jewelry" },
-    { href: "/shop/collections", label: "Collections" },
+    { href: "/#shop", label: "All Products" },
+    { href: "/?sort=newest#shop", label: "New Arrivals" },
+    { href: "/?personalized=1#shop", label: "Personalized Jewelry" },
   ],
   help: [
     { href: "/contact", label: "Contact" },
@@ -110,7 +110,6 @@ export const FOOTER_LINKS = {
   ],
   company: [
     { href: "/about", label: "About Us" },
-    { href: "/reviews", label: "Reviews" },
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms & Conditions" },
   ],
@@ -120,10 +119,8 @@ export const FOOTER_LINKS = {
  * Social media links.
  */
 export const SOCIAL_LINKS = {
-  instagram: "#",
-  facebook: "#",
-  tiktok: "#",
-  whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "94774671009"}`,
+  facebook: "https://www.facebook.com/profile.php?id=61555918591535",
+  whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "94755040704"}`,
 } as const;
 
 /**

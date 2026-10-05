@@ -17,7 +17,7 @@ export function PersonalizedSection() {
             </p>
             
             <ul className="space-y-4 mb-10 text-white/90">
-              {['18k Gold Plated or Sterling Silver', 'Hand-polished finish', 'Ready in 7-10 business days', 'Beautifully packaged for gifting'].map((item) => (
+              {['18k Gold Plated or Sterling Silver', 'Hand-polished finish', 'Ready in 3–7 business days', 'Beautifully packaged for gifting'].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gold/20 text-brand-gold-soft">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { OrderStatusUpdater } from "@/components/admin/order-status-updater";
 
 export const metadata = {
-  title: "Order Details | Lassana LK Admin",
+  title: "Order Details",
 };
 
 export default async function OrderDetailsPage(props: { params: Promise<{ id: string }> }) {

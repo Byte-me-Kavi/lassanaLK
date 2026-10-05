@@ -3,7 +3,7 @@ import { cn, formatPrice } from "@/lib/utils";
 interface PriceDisplayProps {
   price: number;
   comparePrice?: number | null;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   showDecimals?: boolean;
   className?: string;
 }
@@ -12,6 +12,7 @@ const sizeClasses = {
   sm: "text-sm",
   md: "text-base",
   lg: "text-lg",
+  xl: "text-2xl md:text-3xl",
 };
 
 /**
@@ -28,21 +29,21 @@ export function PriceDisplay({
   const hasDiscount = comparePrice && comparePrice > price;
 
   return (
-    <div className={cn("flex items-baseline gap-2", className)}>
+    <div className={cn("tabular flex flex-wrap items-baseline gap-x-2", className)}>
       <span
         className={cn(
-          "font-semibold text-foreground",
-          sizeClasses[size],
-          hasDiscount && "text-brand-purple"
+          "font-semibold text-brand-purple",
+          sizeClasses[size]
         )}
       >
         {formatPrice(price, showDecimals)}
       </span>
       {hasDiscount && (
         <span
+          aria-label={`Was ${formatPrice(comparePrice, showDecimals)}`}
           className={cn(
             "text-muted-foreground line-through",
-            size === "lg" ? "text-sm" : "text-xs"
+            size === "lg" || size === "xl" ? "text-sm" : "text-xs"
           )}
         >
           {formatPrice(comparePrice, showDecimals)}

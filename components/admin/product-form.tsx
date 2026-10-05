@@ -39,7 +39,8 @@ const productSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   price: z.coerce.number().min(0, "Price must be positive"),
   compare_price: z.coerce.number().optional(),
-  delivery_fee: z.coerce.number().min(0).default(450),
+  // Default (450) comes from the form defaultValues; a schema .default() breaks the resolver types
+  delivery_fee: z.coerce.number().min(0, "Delivery fee must be positive"),
   description: z.string().optional(),
   short_description: z.string().optional(),
   category: z.string().min(1, "Category is required"),

@@ -47,7 +47,7 @@ export default async function OrderDetailsPage(props: { params: Promise<{ id: st
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Link href="/portal/orders">
             <Button variant="outline" size="icon">
@@ -55,7 +55,7 @@ export default async function OrderDetailsPage(props: { params: Promise<{ id: st
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold font-heading text-brand-purple flex items-center gap-3">
+            <h1 className="text-xl sm:text-2xl font-bold font-heading text-brand-purple flex flex-wrap items-center gap-3">
               Order {order.order_number}
               {getStatusBadge(order.status)}
             </h1>
@@ -66,12 +66,12 @@ export default async function OrderDetailsPage(props: { params: Promise<{ id: st
           </div>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           {order.customer_whatsapp || order.customer_phone ? (
-            <a href={`https://wa.me/${(order.customer_whatsapp || order.customer_phone).replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-green-600 hover:bg-green-700">
+            <a href={`https://wa.me/${(order.customer_whatsapp || order.customer_phone).replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+              <Button className="bg-green-600 hover:bg-green-700 w-full sm:w-auto">
                 <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
+                WhatsApp Customer
               </Button>
             </a>
           ) : null}

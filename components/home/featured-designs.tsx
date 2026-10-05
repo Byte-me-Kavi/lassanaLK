@@ -58,7 +58,7 @@ export async function FeaturedDesigns() {
 
         <div className="mt-12 text-center">
           <Link
-            href="/shop"
+            href="/"
             className="inline-flex h-11 items-center justify-center rounded-lg border-2 border-brand-purple px-8 text-sm font-medium text-brand-purple transition-all hover:bg-brand-purple hover:text-white group"
           >
             View All Designs

@@ -30,7 +30,7 @@ export function PersonalizedSection() {
             </ul>
 
             <Link
-              href="/shop/personalized-jewelry"
+              href="/?category=personalized-jewelry"
               className="inline-flex h-12 items-center justify-center rounded-lg bg-brand-gold px-8 text-sm font-medium text-white transition-all hover:bg-brand-gold-soft hover:shadow-lg hover:-translate-y-0.5"
             >
               Start Customizing
@@ -39,7 +39,7 @@ export function PersonalizedSection() {
           </div>
 
           {/* Right - Image Grid */}
-          <div className="relative h-[400px] md:h-[500px] w-full">
+          <div className="relative h-100 md:h-125 w-full">
             <div className="absolute right-0 top-0 w-3/4 h-3/4 rounded-2xl overflow-hidden shadow-2xl z-20 transform translate-x-4 -translate-y-4">
               <Image
                 src="/placeholder.jpg"

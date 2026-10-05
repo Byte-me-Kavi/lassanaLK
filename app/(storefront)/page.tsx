@@ -129,7 +129,7 @@ export default async function HomePage(props: {
               
               <div className="flex items-center gap-3">
                 <Suspense fallback={<div className="w-10" />}>
-                  <FilterDrawer />
+                  <FilterDrawer materials={materials} categories={categories} />
                 </Suspense>
                 
                 <Suspense fallback={<div className="w-32" />}>

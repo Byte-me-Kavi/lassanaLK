@@ -14,7 +14,7 @@ interface CategoryCardProps {
 export function CategoryCard({ name, slug, imageUrl, description, className }: CategoryCardProps) {
   return (
     <Link
-      href={`/shop/${slug}`}
+      href={`/?category=${slug}`}
       className={cn(
         "group relative flex h-50 md:h-70 w-full flex-col justify-end overflow-hidden rounded-2xl",
         className

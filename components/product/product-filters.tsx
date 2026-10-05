@@ -36,7 +36,7 @@ export function ProductFilters({
     }
     // Reset page on filter change if pagination existed
     params.delete("page");
-    router.push(`/shop?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   };
 
   const toggleCategory = (id: string) => {

@@ -26,14 +26,14 @@ export function HeroSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
-                href="/shop"
+                href="/"
                 className="inline-flex h-12 items-center justify-center rounded-lg bg-brand-purple px-8 text-sm font-medium text-white transition-all hover:bg-brand-purple-deep hover:shadow-lg hover:-translate-y-0.5"
               >
                 Shop Collection
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
-                href="/shop/personalized-jewelry"
+                href="/?category=personalized-jewelry"
                 className="inline-flex h-12 items-center justify-center rounded-lg border-2 border-brand-purple px-8 text-sm font-medium text-brand-purple transition-all hover:bg-brand-purple hover:text-white"
               >
                 Customize Yours
@@ -42,7 +42,7 @@ export function HeroSection() {
           </div>
 
           {/* Right — Visual */}
-          <div className="flex justify-center lg:justify-end relative h-[400px] md:h-[500px] w-full">
+          <div className="flex justify-center lg:justify-end relative h-100 md:h-125 w-full">
             {/* Soft glow behind image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-brand-gold-soft/20 rounded-full blur-3xl" />
             

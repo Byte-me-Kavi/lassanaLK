@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/sheet";
 import { ProductFilters } from "./product-filters";
 
-export function FilterDrawer() {
+import { Material } from "@/lib/types";
+
+export function FilterDrawer({
+  materials = [],
+  categories = []
+}: {
+  materials?: Material[];
+  categories?: { id: string; name: string; slug: string; sort_order: number }[];
+}) {
   return (
     <Sheet>
       <SheetTrigger 
@@ -27,7 +35,7 @@ export function FilterDrawer() {
           <SheetTitle className="font-heading text-2xl text-brand-purple">Filters</SheetTitle>
         </SheetHeader>
         <div className="p-6 overflow-y-auto h-[calc(100vh-80px)]">
-          <ProductFilters />
+          <ProductFilters materials={materials} categories={categories} />
         </div>
       </SheetContent>
     </Sheet>

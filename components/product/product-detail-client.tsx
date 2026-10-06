@@ -14,6 +14,8 @@ import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import { useMounted } from "@/hooks/use-hooks";
 import { productInquiryLink } from "@/lib/whatsapp";
+import { pendantDesignFromSlug } from "@/lib/pendant-designs";
+import { walletDesignFromSlug } from "@/lib/wallet-designs";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Product, CustomizationField, CustomizationFieldWithOptions } from "@/lib/types";
@@ -93,6 +95,9 @@ export function ProductDetailClient({ product, customizationFields, reviews }: P
   const deliveryFee = product.delivery_fee ?? 450;
   // The gold script preview only makes sense for name pendants
   const isNamePendant = product.category?.slug === "name-pendants";
+  // Styled live previews: name pendants and name bracelets (gold lettering), wallets (engraved nameplate)
+  const pendantDesign = pendantDesignFromSlug(product.slug);
+  const walletDesign = walletDesignFromSlug(product.slug);
 
   return (
     <div className="min-h-screen pb-24">
@@ -196,6 +201,8 @@ export function ProductDetailClient({ product, customizationFields, reviews }: P
                   fields={customizationFields as CustomizationFieldWithOptions[]}
                   onChange={setCustomizationValues}
                   showNamePreview={isNamePendant}
+                  pendantDesign={pendantDesign}
+                  walletDesign={walletDesign}
                 />
               </div>
             )}
@@ -243,7 +250,7 @@ export function ProductDetailClient({ product, customizationFields, reviews }: P
                 <p className="text-[15px] leading-snug">
                   <span className="font-semibold text-foreground">Delivered in 1–3 business days</span>
                   <span className="block text-sm text-muted-foreground">
-                    Anywhere in Sri Lanka. Delivery for this piece is {formatPrice(deliveryFee, false)}.
+                    Anywhere in Sri Lanka. Delivery is {formatPrice(deliveryFee, false)} per order, not per item.
                   </span>
                 </p>
               </li>

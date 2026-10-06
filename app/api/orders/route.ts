@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createOrderSchema } from "@/lib/validators/checkout";
 import { createClient } from "@/lib/supabase/server";
 import { createCodClient } from "@/lib/supabase/cod-client";
+import { quoteDelivery } from "@/lib/delivery";
 
 const ALLOWED_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -42,7 +43,6 @@ export async function POST(req: Request) {
     const { data: products } = await supabase.from("products").select("id, price, name, stock_quantity, delivery_fee").in("id", productIds);
     
     let calculatedSubtotal = 0;
-    let deliveryFee = 0;
     
     // Check stock and calculate total
     for (const item of validatedData.items) {
@@ -52,9 +52,12 @@ export async function POST(req: Request) {
         throw new Error(`Insufficient stock for ${dbProduct.name}`);
       }
       calculatedSubtotal += (dbProduct.price * item.quantity);
-      // Delivery fee is added per unit or per product, standard is per unit
-      deliveryFee += (dbProduct.delivery_fee ?? 450) * item.quantity;
     }
+
+    // Delivery is charged once per order (see lib/delivery.ts), using the DB fees, not the client's
+    const { fee: deliveryFee } = quoteDelivery(
+      validatedData.items.map((item) => products?.find((p) => p.id === item.productId)?.delivery_fee)
+    );
     
     const total = calculatedSubtotal + deliveryFee;
 

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Truck } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { quoteDelivery } from "@/lib/delivery";
 import { useCartStore } from "@/stores/cart-store";
 import { useMounted } from "@/hooks/use-hooks";
 import { QuantitySelector } from "@/components/ui/quantity-selector";
@@ -28,8 +29,8 @@ export function CartDrawer() {
 
   const subtotal = getSubtotal();
   const itemCount = getItemCount();
-  // Same per-item delivery calculation as the checkout order summary
-  const deliveryFee = items.reduce((acc, item) => acc + (item.delivery_fee ?? 450) * item.quantity, 0);
+  // Same once-per-order delivery rule as checkout and the order API
+  const delivery = quoteDelivery(items.map((item) => item.delivery_fee));
   const isEmpty = items.length === 0;
 
   return (
@@ -138,9 +139,23 @@ export function CartDrawer() {
                 <span className="text-[15px] text-muted-foreground">Subtotal</span>
                 <span className="tabular font-heading font-semibold text-2xl text-brand-purple">{formatPrice(subtotal, false)}</span>
               </div>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">
-                Delivery will be {formatPrice(deliveryFee, false)}, added at checkout. You pay in cash when your order arrives.
-              </p>
+              {delivery.isFree ? (
+                <div className="flex items-start gap-3 rounded-xl border border-brand-gold/40 bg-brand-gold/15 px-3.5 py-3">
+                  <Truck className="mt-0.5 h-5 w-5 shrink-0 text-brand-gold-deep" />
+                  <p className="text-[13px] leading-snug">
+                    <span className="block text-sm font-semibold text-brand-gold-deep">
+                      Free delivery <span className="font-normal text-muted-foreground line-through">{formatPrice(delivery.regularFee, false)}</span>
+                    </span>
+                    <span className="text-foreground/75">
+                      You&apos;re buying from both our Rs. 450 and Rs. 600 delivery ranges, so delivery is on us. You pay in cash when your order arrives.
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[13px] leading-relaxed text-muted-foreground">
+                  Delivery is {formatPrice(delivery.fee, false)} for your whole order, added at checkout. You pay in cash when your order arrives.
+                </p>
+              )}
               <Link
                 href="/checkout"
                 onClick={closeCart}

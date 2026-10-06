@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import { Truck } from "lucide-react";
 import { useCartStore } from "@/stores/cart-store";
 import { PriceDisplay } from "@/components/ui/price-display";
 import { Separator } from "@/components/ui/separator";
+import { quoteDelivery } from "@/lib/delivery";
 
 export function OrderSummary() {
   const { items, getSubtotal } = useCartStore();
   const subtotal = getSubtotal();
-  const deliveryFee = items.reduce((acc, item) => acc + ((item.delivery_fee ?? 450) * item.quantity), 0);
+  const delivery = quoteDelivery(items.map((item) => item.delivery_fee));
+  const deliveryFee = delivery.fee;
   const total = subtotal + deliveryFee;
 
   if (items.length === 0) {
@@ -66,9 +69,26 @@ export function OrderSummary() {
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Delivery</span>
-          <span className="font-medium"><PriceDisplay price={deliveryFee} size="sm" /></span>
+          {delivery.isFree ? (
+            <span className="flex items-baseline gap-2">
+              <PriceDisplay price={delivery.regularFee} size="sm" className="text-muted-foreground line-through" />
+              <span className="font-semibold text-brand-gold-deep">Free</span>
+            </span>
+          ) : (
+            <span className="font-medium"><PriceDisplay price={deliveryFee} size="sm" /></span>
+          )}
         </div>
       </div>
+
+      {delivery.isFree && (
+        <div className="mb-4 flex items-start gap-3 rounded-lg border border-brand-gold/40 bg-brand-gold/15 p-3.5">
+          <Truck className="mt-0.5 h-5 w-5 shrink-0 text-brand-gold-deep" />
+          <p className="text-sm leading-snug">
+            <span className="block font-semibold text-brand-gold-deep">Free delivery on this order</span>
+            <span className="text-foreground/75">You&apos;re buying from both our Rs. 450 and Rs. 600 delivery ranges, so delivery is on us.</span>
+          </p>
+        </div>
+      )}
       
       <Separator className="mb-4" />
       

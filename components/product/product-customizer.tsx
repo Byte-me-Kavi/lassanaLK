@@ -6,6 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+import { PendantPreview } from "@/components/product/pendant-preview";
+import { WalletPreview } from "@/components/product/wallet-preview";
+import type { PreviewKey } from "@/lib/pendant-designs";
 import type { CustomizationFieldWithOptions } from "@/lib/types";
 
 interface ProductCustomizerProps {
@@ -13,6 +16,10 @@ interface ProductCustomizerProps {
   onChange: (values: Record<string, string>) => void;
   /** Show the gold script preview under name fields (name pendants only) */
   showNamePreview?: boolean;
+  /** Name pendant design number or bracelet slug with a styled gold preview; replaces the plain script preview */
+  pendantDesign?: PreviewKey | null;
+  /** Wallet slug with a styled nameplate preview */
+  walletDesign?: string | null;
 }
 
 // Fields that hold the words being engraved get a live script preview
@@ -21,7 +28,7 @@ const ENGRAVING_FIELD = /name|text|engrav|word|initial/i;
 const fieldClass =
   "h-12 rounded-xl border-input bg-white px-4 text-base focus-visible:border-brand-purple focus-visible:ring-3 focus-visible:ring-brand-purple/15";
 
-export function ProductCustomizer({ fields, onChange, showNamePreview = false }: ProductCustomizerProps) {
+export function ProductCustomizer({ fields, onChange, showNamePreview = false, pendantDesign = null, walletDesign = null }: ProductCustomizerProps) {
   const [values, setValues] = useState<Record<string, string>>({});
 
   const handleChange = (name: string, value: string) => {
@@ -31,6 +38,13 @@ export function ProductCustomizer({ fields, onChange, showNamePreview = false }:
   };
 
   if (fields.length === 0) return null;
+
+  const isEngravingField = (field: CustomizationFieldWithOptions) =>
+    field.field_type === "text" && ENGRAVING_FIELD.test(`${field.field_name} ${field.field_label}`);
+  // Names in field order, so couple designs get "first name" on the top line
+  const engravedNames = fields.filter(isEngravingField).map((f) => values[f.field_name] || "");
+  const hasStyledPreview = pendantDesign !== null || walletDesign !== null;
+  const showDesignPreview = hasStyledPreview && engravedNames.some((v) => v.trim());
 
   return (
     <div className="rounded-2xl border border-brand-purple/12 bg-white p-5 md:p-6">
@@ -42,10 +56,7 @@ export function ProductCustomizer({ fields, onChange, showNamePreview = false }:
       <div className="mt-5 space-y-5">
         {fields.map((field) => {
           const value = values[field.field_name] || "";
-          const showPreview =
-            showNamePreview &&
-            field.field_type === "text" &&
-            ENGRAVING_FIELD.test(`${field.field_name} ${field.field_label}`);
+          const showPreview = showNamePreview && !hasStyledPreview && isEngravingField(field);
 
           return (
             <div key={field.id} className="space-y-2">
@@ -110,6 +121,21 @@ export function ProductCustomizer({ fields, onChange, showNamePreview = false }:
             </div>
           );
         })}
+
+        {showDesignPreview && (
+          <div>
+            {walletDesign !== null ? (
+              <WalletPreview design={walletDesign} names={engravedNames} className="overflow-hidden rounded-xl px-3 py-4" />
+            ) : (
+              pendantDesign !== null && (
+                <PendantPreview design={pendantDesign} names={engravedNames} className="overflow-hidden rounded-xl px-4 py-5" />
+              )
+            )}
+            <p className="mt-2 text-xs text-muted-foreground">
+              Preview for reference. Each piece is hand-finished, so the final product may vary slightly.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

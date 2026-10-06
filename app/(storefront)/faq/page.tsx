@@ -57,7 +57,7 @@ const FAQS = [
       },
       {
         q: "How much is the delivery fee?",
-        a: "Our standard delivery fee is Rs. 450 per product. We occasionally run free delivery promotions, which will be highlighted during checkout.",
+        a: "Delivery is charged once per order, not per item. Most pieces have Rs. 450 delivery and some have Rs. 600, so your order pays Rs. 450 or Rs. 600 in total however many items you buy. Order pieces from both the Rs. 450 and the Rs. 600 ranges together and delivery is free. The delivery fee for each piece is shown on its product page.",
       },
       {
         q: "What is your return policy?",
